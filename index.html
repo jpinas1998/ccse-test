@@ -423,6 +423,7 @@ textarea.buscar { min-height: 120px; font-family: ui-monospace, monospace; font-
 .esq-rels .btn-texto { min-height: 32px; padding: 2px 6px; }
 .esq-pista { text-align: center; color: var(--tinta-3); font-size: .85rem; margin: -4px 0 12px; }
 .btn-esq { display: inline-flex; align-items: center; gap: 8px; }
+.esq-icono { flex: none; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; color: var(--c); background: color-mix(in srgb, var(--c) 13%, var(--superficie)); }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 @media print { .tabbar, .barra-accion { display: none; } }
@@ -1389,6 +1390,7 @@ const TABS = [
   { id: 'simulacro', label: 'Simulacro', icon: ICON.tabExamen },
   { id: 'repaso', label: 'Repaso', icon: ICON.tabRepaso },
   { id: 'biblioteca', label: 'Preguntas', icon: ICON.tabLibro },
+  { id: 'esquemas', label: 'Esquemas', icon: ICON.esquema },
   { id: 'progreso', label: 'Progreso', icon: ICON.tabMas },
 ];
 function ir(p, prm = {}, push = true) {
@@ -1415,12 +1417,12 @@ function render() {
   const tabbar = $('#tabbar');
   tabbar.hidden = !!enSesion || pantalla === 'resumen';
   tabbar.innerHTML = TABS.map(t => `<button class="tab" data-ir="${t.id}" ${tabActiva() === t.id ? 'aria-current="page"' : ''}>${t.icon()}<span>${t.label}</span></button>`).join('');
-  const vistas = { camino: vCamino, sesion: vSesion, resumen: vResumen, simulacro: vSimulacro, repaso: vRepaso, biblioteca: vBiblioteca, esquema: vEsquema, progreso: vProgreso };
+  const vistas = { camino: vCamino, sesion: vSesion, resumen: vResumen, simulacro: vSimulacro, repaso: vRepaso, biblioteca: vBiblioteca, esquemas: vEsquemas, esquema: vEsquema, progreso: vProgreso };
   app.innerHTML = (vistas[pantalla] || vCamino)();
   if (pantalla === 'sesion' && S.active && S.active.tipo === 'simulacro' && S.active.fase === 'responder') arrancarReloj(S.active);
   if (pantalla === 'sesion' && S.active && S.active.tipo === 'simulacro' && S.active.fase === 'explicar' && !S.active.pausa) arrancarReloj(S.active);
 }
-function tabActiva() { if (pantalla === 'esquema') return 'biblioteca'; return ['camino', 'simulacro', 'repaso', 'biblioteca', 'progreso'].includes(pantalla) ? pantalla : (pantalla === 'resumen' ? '' : 'camino'); }
+function tabActiva() { if (pantalla === 'esquema') return 'esquemas'; return ['camino', 'simulacro', 'repaso', 'biblioteca', 'esquemas', 'progreso'].includes(pantalla) ? pantalla : (pantalla === 'resumen' ? '' : 'camino'); }
 function aplicarAjustes() {
   const r = document.documentElement;
   if (S.settings.theme === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', S.settings.theme);
@@ -1703,8 +1705,6 @@ function vBiblioteca() {
       <label class="oculto" for="buscar">Buscar pregunta</label><input id="buscar" class="buscar" type="search" placeholder="Buscar: Moncloa, 112, Constitución…" value="${esc(filtroTexto)}" autocomplete="off">
       <div id="resultados"></div>
       <div class="leyenda" style="margin-top:14px"><span><i class="punto"></i>Sin ver</span><span><i class="punto debil"></i>Fallada</span><span><i class="punto acertada"></i>Acertada</span><span><i class="punto dominada"></i>Dominada</span></div>
-      <div class="tarjeta"><h2>${ICON.esquema()} Esquemas</h2><p class="nota">Quién depende de quién, cómo se hace una ley, fechas, mapas de comunidades… Toca las cajas para ver cómo se relacionan.</p>
-        <ul class="lista">${ESQUEMAS.slice().sort((a, b) => a.tarea - b.tarea).map(e => `<li><button class="fila" data-esq="${e.id}"><span class="crece"><b>${esc(e.titulo)}</b><br><span class="peq">Tarea ${e.tarea} · ${plural(idsEsquema(e.id).length, 'pregunta relacionada', 'preguntas relacionadas')}</span></span>${ICON.chev()}</button></li>`).join('')}</ul></div>
       <div class="tarjeta"><ul class="lista">${[1, 2, 3, 4, 5].map(tt => { const ids = IDS_T(tt); return `<li><button class="fila" data-bib="${tt}"><span class="crece"><b>Tarea ${tt}. ${esc(TAREAS[tt].nombre)}</b><br><span class="peq">${ids.length} preguntas, ${ids.filter(superada).length} acertadas</span></span>${ICON.chev()}</button></li>`; }).join('')}</ul></div>`;
   } else {
     h += `<button class="btn-texto" data-bib="">‹ Todas las tareas</button><h1 class="tit-pagina">Tarea ${t}. ${esc(TAREAS[t].nombre)}</h1>`;
@@ -1858,10 +1858,20 @@ function elegirNodo(n) {
 function botonesEsquema(lista, qid) {
   return lista.map(id => `<button class="btn btn-sec btn-esq" data-esq="${id}"${qid ? ` data-esq-q="${qid}"` : ''}>${ICON.esquema()} ${qid ? 'Ver en el esquema' : 'Esquema'}: ${esc(ESQ[id].corto)}</button>`).join('');
 }
+function vEsquemas() {
+  let h = `<div class="pagina"><h1 class="tit-pagina">Esquemas</h1>
+    <p class="intro">Diagramas para entender cómo se relacionan las cosas: quién depende de quién, quién elige a quién, en qué orden pasan. Toca las cajas para ver los detalles.</p>`;
+  for (const t of [1, 2, 3, 4, 5]) {
+    const lista = ESQUEMAS.filter(e => e.tarea === t);
+    if (!lista.length) continue;
+    h += `<div class="tarjeta"><h2>Tarea ${t}. ${esc(TAREAS[t].nombre)}</h2><ul class="lista">${lista.map(e => `<li><button class="fila" data-esq="${e.id}"><span class="esq-icono tono-${e.tono || 'a'}">${ICON.esquema()}</span><span class="crece"><b>${esc(e.titulo)}</b><br><span class="peq">${esc(e.intro)} ${plural(idsEsquema(e.id).length, 'pregunta', 'preguntas')}.</span></span>${ICON.chev()}</button></li>`).join('')}</ul></div>`;
+  }
+  return h + `</div>`;
+}
 function vEsquema() {
   const e = ESQ[params.id];
   if (!e) { params = {}; return vBiblioteca(); }
-  let h = `<div class="pagina"><button class="btn-texto" data-bib="">‹ Preguntas y esquemas</button>
+  let h = `<div class="pagina"><button class="btn-texto" data-ir="esquemas">‹ Todos los esquemas</button>
     <h1 class="tit-pagina">${esc(e.titulo)}</h1><p class="intro">${esc(e.intro)}</p>`;
   h += esquemaHTML(e, params, false);
   const ids = idsEsquema(e.id);
