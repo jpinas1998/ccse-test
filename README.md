@@ -16,6 +16,7 @@ No hace falta registrarse ni instalar nada: se abre en el navegador del móvil o
 - **Simulacro**: exámenes como el real (25 preguntas, 45 minutos, apruebas con 15 aciertos), con el mismo reparto por tareas que la prueba oficial.
 - **Repaso**: vuelve a las preguntas que has fallado y afianza las que ya sabes.
 - **Preguntas**: consulta las 300 preguntas con su respuesta, una explicación, la cita del manual (con número de página) y fichas de resumen por tema.
+- **Volver atrás**: durante una práctica o un simulacro puedes ir a las preguntas que ya has respondido para revisarlas (sin cambiar la respuesta) y luego seguir donde ibas.
 - **Esquemas**: diagramas interactivos para entender las relaciones: los poderes del Estado (quién elige a quién y de quién depende cada institución), cómo se elige al presidente, cómo se hace una ley, la organización territorial, las fuerzas de seguridad, las lenguas, las elecciones, comunidades y provincias, ríos y climas, trámites y líneas del tiempo. Al responder una pregunta, la app te lleva al esquema y marca con ★ dónde encaja.
 - **Progreso**: aciertos por tarea, historial de simulacros, las preguntas que más fallas y tu racha de días de estudio.
 - Ajustes de tema claro u oscuro y tamaño de letra.

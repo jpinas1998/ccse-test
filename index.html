@@ -251,6 +251,8 @@ p { margin: 0; }
 }
 .barra-accion .dentro { max-width: 680px; margin: 0 auto; display: flex; gap: 10px; align-items: center; }
 .barra-accion .btn { flex: 1; }
+.barra-accion .btn.btn-nav { flex: 0 0 auto; padding: 10px 16px; }
+.aviso.revision { margin-top: 4px; }
 .atajos { color: var(--tinta-3); font-size: .8rem; text-align: center; margin-top: 18px; }
 @media (hover: none) { .atajos { display: none; } }
 
@@ -1259,6 +1261,9 @@ function comprobar() {
   if (ses.tipo === 'simulacro' && primera) reg(id).ex++;
   ses.fase = 'explicar';
   ses.ultima = { id, ok, eleccion: ses.sel };
+  // Historial de lo ya respondido, para poder volver atrás y revisarlo (sin volver a contestar)
+  (ses.hist = ses.hist || []).push({ id, eleccion: ses.sel, ok, orden: ordenOpciones(ses, id).slice() });
+  ses.ver = null;
   if (!ok && S.settings.vibrar && navigator.vibrate) { try { navigator.vibrate(60); } catch (e) { /* sin vibración */ } }
   if (ses.tipo === 'simulacro') pararReloj(ses), arrancarReloj(ses);
   guardar();
@@ -1273,11 +1278,24 @@ function siguiente() {
   const { id, ok } = ses.ultima;
   ses.cola.shift();
   if (!ok && ses.repetir) { delete ses.orden[id]; ses.cola.push(id); }
-  ses.fase = 'responder'; ses.sel = null; ses.ultima = null;
+  ses.fase = 'responder'; ses.sel = null; ses.ultima = null; ses.ver = null;
   if (!ses.cola.length) return terminarSesion();
   guardar();
   render();
   window.scrollTo(0, 0);
+}
+// Navegación por las preguntas ya respondidas. En fase 'explicar' la última del historial es la actual.
+function ultimaRevisable(ses) { return (ses.hist || []).length - (ses.fase === 'explicar' ? 2 : 1); }
+function indiceAnterior(ses) { return ses.ver != null ? ses.ver - 1 : ultimaRevisable(ses); }
+function anterior() {
+  const ses = S.active; if (!ses) return;
+  const i = indiceAnterior(ses); if (i < 0) return;
+  ses.ver = i; guardar(); render(); window.scrollTo(0, 0);
+}
+function adelante() {
+  const ses = S.active; if (!ses || ses.ver == null) return;
+  ses.ver = ses.ver + 1 > ultimaRevisable(ses) ? null : ses.ver + 1;
+  guardar(); render(); window.scrollTo(0, 0);
 }
 function terminarSesion() {
   const ses = S.active;
@@ -1482,12 +1500,15 @@ function tituloSesion(ses) {
 function vSesion() {
   const ses = S.active;
   if (!ses || !ses.cola.length) return vCamino();
-  const id = ses.cola[0], q = Q[id];
-  const orden = ordenOpciones(ses, id);
-  const explicar = ses.fase === 'explicar';
+  const rev = ses.ver != null && ses.hist ? ses.hist[ses.ver] : null;   // revisando una ya respondida
+  const id = rev ? rev.id : ses.cola[0], q = Q[id];
+  const orden = rev ? rev.orden : ordenOpciones(ses, id);
+  const explicar = !!rev || ses.fase === 'explicar';
+  const eleccion = rev ? rev.eleccion : ses.ultima && ses.ultima.eleccion;
+  const acierto = rev ? rev.ok : ses.ultima && ses.ultima.ok;
   const letrasVis = ['A', 'B', 'C'];
   const respondidas = ses.ids.length - ses.cola.length;
-  const vuelve = ses.repetir && ses.res[id] && (ses.fase === 'responder' || ses.res[id].intentos > 1);
+  const vuelve = !rev && ses.repetir && ses.res[id] && (ses.fase === 'responder' || ses.res[id].intentos > 1);
   // Progreso: una marca por pregunta de la sesión
   const marcas = ses.ids.map(x => {
     const r = ses.res[x];
@@ -1517,6 +1538,7 @@ function vSesion() {
   cab += `</div>`;
 
   let html = `<div class="pagina">${cab}
+    ${rev ? `<div class="aviso revision">Estás revisando la respuesta ${ses.ver + 1} de ${ses.hist.length}. Ya está contestada: solo puedes mirarla. Pulsa <b>Siguiente</b> para volver a la pregunta en curso.</div>` : ''}
     <div class="pregunta-meta"><span class="chip">${esc(TAREAS[q.tarea].corto)}</span><span class="chip">${esc(q.subtema)}</span>${q.nueva2026 ? '<span class="chip nueva">Nueva en 2026</span>' : ''}${vuelve ? '<span class="chip repite">Otra vez</span>' : ''}</div>
     <h1 class="enunciado" id="enunciado">${esc(q.q)}</h1>
     <div class="opciones${q.tipo === 'vf' ? ' vf' : ''}" role="radiogroup" aria-labelledby="enunciado">`;
@@ -1524,7 +1546,7 @@ function vSesion() {
     let cls = '', marca = '';
     if (explicar) {
       if (L === q.ans) { cls = 'correcta'; marca = ICON.ok(26); }
-      else if (L === ses.ultima.eleccion) { cls = 'incorrecta'; marca = ICON.ko(26); }
+      else if (L === eleccion) { cls = 'incorrecta'; marca = ICON.ko(26); }
       else cls = 'apagada';
     }
     const sel = !explicar && ses.sel === L;
@@ -1532,12 +1554,15 @@ function vSesion() {
       ${q.tipo === 'vf' ? '' : `<span class="letra">${letrasVis[i]}</span>`}<span class="txt">${esc(q.opts[L])}</span>${marca ? `<span class="marca">${marca}</span>` : ''}</button>`;
   });
   html += `</div>`;
-  if (explicar) html += explicacionHTML(q, ses.ultima.eleccion, ses.ultima.ok);
-  html += `<p class="atajos">Teclado: ${q.tipo === 'vf' ? 'V / F' : '1, 2, 3 o A, B, C'} para elegir. Intro para ${explicar ? 'seguir' : 'comprobar'}.</p></div>`;
+  if (explicar) html += explicacionHTML(q, eleccion, acierto);
+  html += `<p class="atajos">Teclado: ${rev ? '' : `${q.tipo === 'vf' ? 'V / F' : '1, 2, 3 o A, B, C'} para elegir. `}Intro para ${rev || explicar ? 'seguir' : 'comprobar'}. Flecha izquierda para ver la anterior.</p></div>`;
   const ultima = ses.cola.length === 1 && (ses.ultima ? (ses.ultima.ok || !ses.repetir) : false);
-  html += `<div class="barra-accion"><div class="dentro">${explicar
-    ? `<button class="btn" data-accion="siguiente" id="btn-principal">${ultima ? 'Ver resultado' : 'Siguiente'}</button>`
-    : `<button class="btn" data-accion="comprobar" id="btn-principal" ${ses.sel ? '' : 'disabled'}>Comprobar</button>`}</div></div>`;
+  const btnAnterior = indiceAnterior(ses) >= 0 ? `<button class="btn btn-sec btn-nav" data-accion="anterior" aria-label="Ver la pregunta anterior">‹ Anterior</button>` : '';
+  html += `<div class="barra-accion"><div class="dentro">${btnAnterior}${rev
+    ? `<button class="btn" data-accion="adelante" id="btn-principal">Siguiente ›</button>`
+    : explicar
+      ? `<button class="btn" data-accion="siguiente" id="btn-principal">${ultima ? 'Ver resultado' : 'Siguiente'}</button>`
+      : `<button class="btn" data-accion="comprobar" id="btn-principal" ${ses.sel ? '' : 'disabled'}>Comprobar</button>`}</div></div>`;
   return html;
 }
 
@@ -1997,6 +2022,8 @@ document.addEventListener('click', e => {
   switch (d.accion) {
     case 'comprobar': return comprobar();
     case 'siguiente': return siguiente();
+    case 'anterior': return anterior();
+    case 'adelante': return adelante();
     case 'salir': return abandonarSesion();
     case 'reanudar': return ir('sesion');
     case 'descartar': descartarSesion(); return render();
@@ -2051,6 +2078,12 @@ document.addEventListener('keydown', e => {
   if (pantalla !== 'sesion' || !S.active || modalAbierto()) return;
   if (e.target.matches('input, textarea')) return;
   const ses = S.active, q = Q[ses.cola[0]];
+  if (e.key === 'Enter' && e.target.closest('.barra-accion button')) return;   // el propio botón decide
+  if (e.key === 'ArrowLeft') { if (indiceAnterior(ses) >= 0) { e.preventDefault(); anterior(); } return; }
+  if (ses.ver != null) {
+    if ((e.key === 'Enter' || e.key === 'ArrowRight') && !e.target.closest('details, [data-ficha], [data-esq], [data-accion="anterior"]')) { e.preventDefault(); adelante(); }
+    return;
+  }
   if (ses.fase === 'responder') {
     const orden = ordenOpciones(ses, q.id);
     const k = e.key.toLowerCase();
