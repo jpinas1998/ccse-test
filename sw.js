@@ -1,7 +1,7 @@
 /* Service worker de Camino CCSE: guarda la app para usarla sin conexión.
    Estrategia: responde desde la caché al instante y la actualiza en segundo plano,
    así la versión nueva se ve en la siguiente apertura. Sube VERSION al cambiar archivos. */
-const VERSION = 'camino-ccse-v1';
+const VERSION = 'camino-ccse-v2';
 const ARCHIVOS = [
   './',
   'index.html',

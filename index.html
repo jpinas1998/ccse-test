@@ -33,6 +33,8 @@
   --verde-fondo: #E3F3EA;
   --rojo: #C2362B;
   --rojo-fondo: #FBE7E4;
+  --morado: #6B3FA0;
+  --naranja: #B4531A;
   --foco: #1D4F91;
   --sombra: 0 1px 2px rgba(20, 40, 70, .08), 0 4px 14px rgba(20, 40, 70, .06);
   --radio: 14px;
@@ -56,6 +58,8 @@
     --verde-fondo: #12352A;
     --rojo: #F2877C;
     --rojo-fondo: #3D1E1E;
+  --morado: #C3A3EE;
+  --naranja: #F0A36B;
     --foco: #F2C230;
     --sombra: 0 1px 2px rgba(0, 0, 0, .3);
     color-scheme: dark;
@@ -77,6 +81,8 @@
   --verde-fondo: #12352A;
   --rojo: #F2877C;
   --rojo-fondo: #3D1E1E;
+  --morado: #C3A3EE;
+  --naranja: #F0A36B;
   --foco: #F2C230;
   --sombra: 0 1px 2px rgba(0, 0, 0, .3);
   color-scheme: dark;
@@ -347,6 +353,75 @@ textarea.buscar { min-height: 120px; font-family: ui-monospace, monospace; font-
 .stat b { display: block; font-size: 1.5rem; }
 .stat span { color: var(--tinta-2); font-size: .82rem; }
 
+/* ---------- Esquemas (diagramas) ---------- */
+.tono-a { --c: var(--azul); } .tono-v { --c: var(--verde); } .tono-m { --c: var(--morado); }
+.tono-n { --c: var(--naranja); } .tono-o { --c: #B08A12; } .tono-g { --c: var(--tinta-3); }
+:root[data-theme="dark"] .tono-o { --c: var(--amarillo); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tono-o { --c: var(--amarillo); } }
+.esq { --c: var(--tinta-3); margin: 6px 0 14px; }
+.esq-bloque { background: var(--superficie); border-radius: var(--radio); box-shadow: var(--sombra); padding: 16px 10px; margin-bottom: 14px; }
+.esq-bloque > h2 { font-size: 1.1rem; margin: 0 6px 12px; }
+.nodo {
+  --cf: color-mix(in srgb, var(--c) 13%, var(--superficie));
+  display: block; width: 100%; text-align: center; border: 2px solid var(--c); background: var(--cf);
+  border-radius: 12px; padding: 7px 8px; min-height: 44px; font-weight: 700; font-size: .9rem; line-height: 1.25;
+  overflow-wrap: break-word; hyphens: auto; transition: opacity .15s, box-shadow .15s; position: relative;
+}
+.nodo small { display: block; font-weight: 400; color: var(--tinta-2); font-size: .78rem; margin-top: 2px; }
+.nodo.sel { box-shadow: 0 0 0 3px var(--superficie), 0 0 0 6px var(--c); }
+.nodo.preg::after { content: "★"; position: absolute; top: -9px; right: -6px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--amarillo); color: #1A2333; font-size: .75rem; line-height: 22px; text-align: center; }
+.esq.con-sel .nodo:not(.sel):not(.rel):not(.preg) { opacity: .35; }
+.esq-sep { margin: 14px 0 10px; border-top: 2px dashed var(--linea); }
+.esq-cols.sin-padre { padding-top: 0; }
+.esq-cols.sin-padre::before, .esq-cols.sin-padre > .esq-col::before { display: none; }
+.tarjeta h2 svg { vertical-align: -4px; margin-right: 4px; }
+.esq-fila { display: flex; gap: 8px; justify-content: center; }
+.esq-fila > .nodo { flex: 1 1 0; max-width: 300px; }
+.esq-con { width: 0; height: 18px; margin: 0 auto; border-left: 2px solid var(--linea); }
+.esq-cols { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; position: relative; padding-top: 16px; }
+.esq-cols::before { content: ""; position: absolute; top: 0; left: calc(50% / var(--n)); right: calc(50% / var(--n)); border-top: 2px solid var(--linea); }
+.esq-col { position: relative; min-width: 0; }
+.esq-col::before { content: ""; position: absolute; top: -16px; left: 50%; height: 16px; border-left: 2px solid var(--linea); }
+.esq-col-tit { color: var(--c); font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; text-align: center; margin: 0 0 6px; line-height: 1.2; }
+.esq-arbol, .esq-arbol ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.esq-arbol ul { margin: 6px 0 0 7px; padding-left: 7px; border-left: 2px solid var(--linea); }
+.esq-arbol ul > li { position: relative; }
+.esq-arbol ul > li::before { content: ""; position: absolute; left: -9px; top: 22px; width: 9px; border-top: 2px solid var(--linea); }
+.esq-cols .nodo { font-size: .8rem; padding: 6px 5px; }
+.esq-cols .nodo small { font-size: .72rem; }
+.esq-flujo { display: grid; gap: 0; max-width: 460px; margin: 0 auto; }
+.esq-paso { display: flex; gap: 8px; }
+.esq-paso > .nodo { flex: 1 1 0; }
+.esq-paso-o { align-self: center; color: var(--tinta-3); font-size: .8rem; flex: none; }
+.esq-flecha { display: block; margin: 2px auto; color: var(--tinta-3); }
+.esq-grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.esq-grupo { --cf: color-mix(in srgb, var(--c) 6%, var(--superficie)); border: 1px solid var(--linea); border-radius: 12px; padding: 6px; background: var(--cf); }
+.esq-grupo ul { margin: 6px 0 2px; padding-left: 20px; font-size: .86rem; }
+.esq-grupo li + li { margin-top: 2px; }
+.esq-linea { list-style: none; margin: 0; padding: 0; position: relative; }
+.esq-linea::before { content: ""; position: absolute; left: 76px; top: 10px; bottom: 10px; border-left: 2px solid var(--linea); }
+.esq-hito { display: grid; grid-template-columns: 66px 1fr; gap: 20px; align-items: center; padding: 4px 0; position: relative; }
+.esq-hito-f { text-align: right; font-weight: 700; font-size: .85rem; color: var(--tinta-2); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.esq-hito::before { content: ""; position: absolute; left: 72px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--linea); }
+.esq-hito .nodo { text-align: left; }
+.esq-clave { background: var(--amarillo-suave); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
+.esq-clave h2 { font-size: 1rem; margin-bottom: 6px; }
+.esq-clave ul { margin: 0; padding-left: 20px; }
+.esq-clave li + li { margin-top: 4px; }
+.esq-pregunta { border-left: 4px solid var(--amarillo); background: var(--superficie); border-radius: 0 12px 12px 0; padding: 10px 12px; margin-bottom: 14px; font-size: .95rem; box-shadow: var(--sombra); }
+.esq-panel { position: sticky; bottom: calc(68px + env(safe-area-inset-bottom)); z-index: 4; background: var(--superficie); border-top: 6px solid var(--c);
+  border-radius: var(--radio); box-shadow: 0 -4px 22px rgba(10, 20, 36, .22); padding: 12px 14px; max-height: 40vh; overflow: auto; margin-bottom: 14px; font-size: .94rem; }
+.dialogo .esq-panel { bottom: 0; }
+.esq-panel-cab { display: flex; gap: 10px; align-items: flex-start; }
+.esq-panel-cab h3 { flex: 1; font-size: 1.1rem; margin: 0; }
+.esq-panel .btn-x { width: 36px; height: 36px; }
+.esq-rels { list-style: none; margin: 8px 0 0; padding: 0; }
+.esq-rels li { padding: 6px 0; border-top: 1px solid var(--linea); font-size: .92rem; }
+.esq-rels .btn-texto { min-height: 32px; padding: 2px 6px; }
+.esq-pista { text-align: center; color: var(--tinta-3); font-size: .85rem; margin: -4px 0 12px; }
+.btn-esq { display: inline-flex; align-items: center; gap: 8px; }
+
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 @media print { .tabbar, .barra-accion { display: none; } }
 
@@ -373,6 +448,514 @@ const FICHA_SUB = Object.create(null);
 (D.fichas || []).forEach(f => { FICHAS[f.id] = f; FICHA_SUB[f.subtema] = f; });
 const TOTAL = D.questions.length;
 const IDS_T = t => D.questions.filter(q => q.tarea === t).map(q => q.id);
+
+// ============================================================ Esquemas (diagramas de relaciones)
+/* ESQUEMAS-INICIO
+   Cada esquema tiene nodos (cajas que se pueden tocar) y bloques que los dibujan:
+   - org: organigrama por filas; una fila es una lista de nodos o {cols:[{tit, tono, items}]}
+          (en items, '>' delante del id = depende del anterior; una fila que empieza por '|' va aparte, sin línea).
+   - flujo: pasos de arriba abajo; un paso puede ser una lista de alternativas.
+   - grupos: tarjetas con un nodo de cabecera y una lista de datos.
+   - linea: línea temporal [fecha, nodo].
+   rels: [de, a, frase] = quién depende de quién, quién elige a quién...
+   kw: expresiones (sin tildes, en minúsculas) que enlazan las preguntas con cada nodo.
+   tono: a azul, v verde, m morado, n naranja, o oro, g gris. */
+const ESQUEMAS = [
+  {
+    id: 'poderes', titulo: 'Los poderes del Estado', corto: 'Poderes del Estado', tarea: 1,
+    subtemas: ['Constitución, valores y forma de Estado', 'La Corona', 'Gobierno y presidentes', 'Cortes Generales y leyes', 'Poder judicial y órganos de control', 'Organismos públicos', 'Justicia'],
+    intro: 'Quién manda, quién elige a quién y de quién depende cada institución.',
+    clave: [
+      'Arriba de todo está la Constitución, y la soberanía es del pueblo: de él salen todos los poderes.',
+      'El rey es el jefe del Estado: representa a España, arbitra y modera, pero no gobierna (monarquía parlamentaria).',
+      'Debajo hay tres poderes separados y al mismo nivel: legislativo (Cortes), ejecutivo (Gobierno) y judicial (jueces).',
+      'El presidente del Gobierno depende del Congreso: el Congreso lo elige y lo controla.',
+      'El Tribunal Constitucional va aparte: interpreta la Constitución y no depende de ningún poder.',
+    ],
+    nodos: {
+      pueblo: { t: 'Pueblo español', s: 'Soberanía nacional', tono: 'n', d: 'La soberanía nacional reside en el pueblo español: de él salen todos los poderes del Estado. Vota a sus representantes.', kw: [/pueblo espanol/, /soberania/] },
+      constitucion: { t: 'Constitución de 1978', s: 'La ley de leyes', tono: 'n', d: 'Ley fundamental de España, aprobada en referéndum el 6 de diciembre de 1978. España es un Estado social y democrático de Derecho y una monarquía parlamentaria. Valores superiores: libertad, justicia, igualdad y pluralismo político.', kw: [/\bconstitucion\b/, /ley fundamental/, /ley de leyes/, /referendum/, /valores superiores/, /monarquia parlamentaria/, /estado social/, /separacion de poderes/, /pluralismo/] },
+      rey: { t: 'El rey', s: 'Jefe del Estado · La Corona', tono: 'o', d: 'Felipe VI, rey desde 2014. Máxima representación del Estado y símbolo de su unidad. Arbitra y modera el funcionamiento de las instituciones, pero no gobierna. Vive en el Palacio de la Zarzuela; su residencia oficial es el Palacio Real. Heredero o heredera: Príncipe o Princesa de Asturias.', kw: [/\brey\b/, /\breina\b/, /corona/, /jefe del estado/, /zarzuela/, /palacio real/, /felipe vi\b/, /juan carlos/, /princes[ao] de asturias/, /modera/, /hereditari/, /reinar/] },
+      cortes: { t: 'Cortes Generales', s: 'El Parlamento', d: 'Representan al pueblo español. Hacen y aprueban las leyes y los Presupuestos Generales del Estado y controlan al Gobierno. Tienen dos cámaras.', kw: [/cortes generales/, /parlamento/, /legislativ/, /presupuestos/] },
+      congreso: { t: 'Congreso de los Diputados', s: '350 diputados', d: 'Diputados elegidos por provincias. Aquí se vota la investidura del presidente del Gobierno y se debaten las cuestiones de confianza y las mociones de censura. Su presidente es la tercera autoridad del Estado.', kw: [/congreso/, /\bdiputad/, /investidura/, /mocion de censura/, /cuestion de confianza/, /tercera autoridad/, /\b350\b/] },
+      senado: { t: 'Senado', s: '265 senadores', d: 'Cámara de representación territorial. La mayoría de los senadores los eligen los ciudadanos y el resto, las comunidades autónomas.', kw: [/senado/, /senador/, /representacion territorial/] },
+      defensor: { t: 'Defensor del Pueblo', s: 'Depende de las Cortes', d: 'Atiende las quejas de cualquier persona, española o extranjera, por el mal funcionamiento de las administraciones. Es gratis. Lo eligen el Congreso y el Senado para 5 años.', kw: [/defensor del pueblo/, /queja/] },
+      tcuentas: { t: 'Tribunal de Cuentas', s: 'Depende de las Cortes', d: 'Controla las cuentas y el presupuesto de las administraciones públicas y las cuentas de los partidos políticos. No recauda impuestos: eso lo hace la Agencia Tributaria.', kw: [/tribunal de cuentas/, /\bcuentas\b/] },
+      gobierno: { t: 'Gobierno', s: 'Poder ejecutivo · Sede en Madrid', d: 'Órgano superior del poder ejecutivo. Dirige la política interior y exterior, la Administración civil y militar y la defensa del Estado. Lo forman el presidente, los vicepresidentes y los ministros.', kw: [/(?<!presidente del |presidentas? de |organo de |delegado del )gobierno\b/, /ejecutivo/, /politica (interior|exterior)/, /administracion (civil|militar)/] },
+      presidente: { t: 'Presidente del Gobierno', s: 'Jefe del Gobierno · La Moncloa', d: 'Dirige el Gobierno. Lo elige el Congreso (investidura) a propuesta del rey. Vive en el Palacio de la Moncloa. Desde 1978 ha habido 7 presidentes de 3 partidos; el primero fue Adolfo Suárez.', kw: [/presidente del gobierno/, /moncloa/, /suarez/, /calvo.sotelo/, /felipe gonzalez/, /aznar/, /zapatero/, /rajoy/, /pedro sanchez/, /\bucd\b/, /\bpsoe\b/, /\bpp\b/, /presidentes/, /presidenta/] },
+      ministros: { t: 'Ministros', s: 'Con los vicepresidentes', d: 'Forman el Gobierno junto al presidente. El rey los nombra a propuesta del presidente. Juran o prometen el cargo ante la Constitución, en presencia del rey.', kw: [/\bministr/, /vicepresident/, /juran|prometen/] },
+      ffaa: { t: 'Fuerzas Armadas', s: 'Tierra, Aire, Armada', d: 'El rey tiene el mando supremo. El Gobierno las dirige a través del Ministerio de Defensa. Mira el esquema «Fuerzas Armadas y policías» para el detalle.', kw: [/fuerzas armadas/, /administracion militar/, /mando supremo/] },
+      organismos: { t: 'Organismos', s: 'AEAT, DGT, AEMET, INE…', d: 'Pertenecen a los ministerios: Agencia Tributaria (impuestos; Ministerio de Hacienda), DGT (tráfico), AEMET (meteorología), INE (estadística), ICEX, Banco de España, Instituto Cervantes, Instituto de las Mujeres, Patrimonio Nacional y Turespaña. Son españoles: no son europeos, internacionales ni ONG.', kw: [/agencia tributaria|\baeat\b/, /\bdgt\b/, /aemet/, /\bine\b/, /icex/, /banco de espana/, /instituto cervantes/, /instituto de las mujeres/, /patrimonio nacional/, /turespana/, /impuestos/, /dependen de ministerios/] },
+      consultivos: { t: 'Órganos consultivos', s: 'Consejo de Estado y Consejo Económico y Social: aconsejan al Gobierno', d: 'Órganos consultivos: dan su opinión al Gobierno, no mandan, no recaudan ni controlan cuentas. En el Consejo Económico y Social participan los sindicatos.', kw: [/consejo de estado/, /consejo economico y social/, /consultiv/, /aconseja/] },
+      jueces: { t: 'Jueces y magistrados', s: 'Poder judicial', d: 'Administran la justicia de forma independiente y responsable: no reciben órdenes del Gobierno. La justicia surge del pueblo. Todos los jueces y tribunales forman un único poder judicial (unidad jurisdiccional). Hay que cumplir sus sentencias y colaborar con ellos.', kw: [/\bjuec/, /magistrad/, /judicial/, /administra(n|r)? (la )?justicia/, /tribunales/, /sentencia/, /jurisdiccional/] },
+      cgpj: { t: 'Consejo General del Poder Judicial', s: 'Gobierno de los jueces', d: 'Es el órgano de gobierno de los jueces y garantiza su independencia.', kw: [/consejo general del poder judicial|\bcgpj\b/, /gobierno de los jueces/, /independencia/] },
+      tc: { t: 'Tribunal Constitucional', s: 'Independiente de los tres poderes', tono: 'g', d: 'Interpreta la Constitución y es independiente de los poderes del Estado. Ojo: no aprobó la Constitución (la aprobó el pueblo en referéndum), solo la interpreta. No existe un «poder constitucional».', kw: [/tribunal constitucional/, /interpret/, /poder constitucional/] },
+    },
+    bloques: [
+      { tipo: 'org', filas: [
+        ['pueblo'], ['constitucion'], ['rey'],
+        { cols: [
+          { tit: 'Poder legislativo', tono: 'm', items: ['cortes', '>congreso', '>senado', '>defensor', '>tcuentas'] },
+          { tit: 'Poder ejecutivo', tono: 'a', items: ['gobierno', '>presidente', '>ministros', '>>ffaa', '>>organismos', 'consultivos'] },
+          { tit: 'Poder judicial', tono: 'v', items: ['jueces', 'cgpj'] },
+        ] },
+        ['|', 'tc'],
+      ] },
+    ],
+    rels: [
+      ['pueblo', 'constitucion', 'El pueblo aprobó la Constitución en referéndum (6 de diciembre de 1978).'],
+      ['pueblo', 'cortes', 'El pueblo elige a los diputados y a la mayoría de los senadores en las elecciones generales.'],
+      ['pueblo', 'jueces', 'La justicia surge del pueblo.'],
+      ['constitucion', 'cortes', 'La Constitución separa los poderes: el legislativo son las Cortes Generales.'],
+      ['constitucion', 'gobierno', 'La Constitución separa los poderes: el ejecutivo es el Gobierno.'],
+      ['constitucion', 'jueces', 'La Constitución separa los poderes: el judicial son los jueces y magistrados.'],
+      ['constitucion', 'rey', 'La Constitución dice que la forma política de España es la monarquía parlamentaria.'],
+      ['rey', 'cortes', 'El rey convoca las elecciones y sanciona y ordena publicar las leyes que aprueban las Cortes.'],
+      ['rey', 'presidente', 'El rey propone al candidato a presidente del Gobierno; luego vota el Congreso.'],
+      ['rey', 'ministros', 'El rey nombra a los ministros a propuesta del presidente; juran o prometen el cargo en su presencia.'],
+      ['rey', 'ffaa', 'El rey tiene el mando supremo de las Fuerzas Armadas.'],
+      ['cortes', 'congreso', 'Las Cortes Generales tienen dos cámaras: el Congreso de los Diputados y el Senado.'],
+      ['cortes', 'senado', 'Las Cortes Generales tienen dos cámaras: el Congreso de los Diputados y el Senado.'],
+      ['cortes', 'gobierno', 'Las Cortes controlan al Gobierno y aprueban los Presupuestos Generales del Estado.'],
+      ['congreso', 'presidente', 'El Congreso elige al presidente en la investidura y puede quitarlo con una moción de censura.'],
+      ['cortes', 'defensor', 'El Congreso y el Senado eligen al Defensor del Pueblo para 5 años: depende de las Cortes.'],
+      ['cortes', 'tcuentas', 'El Tribunal de Cuentas depende de las Cortes Generales, no del Gobierno.'],
+      ['gobierno', 'presidente', 'El Gobierno lo forman el presidente, los vicepresidentes y los ministros.'],
+      ['gobierno', 'ministros', 'El Gobierno lo forman el presidente, los vicepresidentes y los ministros.'],
+      ['presidente', 'ministros', 'El presidente propone a los ministros (y el rey los nombra).'],
+      ['ministros', 'ffaa', 'El Gobierno dirige la Administración militar y la defensa a través del Ministerio de Defensa.'],
+      ['ministros', 'organismos', 'Los organismos públicos pertenecen a los ministerios (la Agencia Tributaria, al de Hacienda).'],
+      ['consultivos', 'gobierno', 'El Consejo de Estado y el Consejo Económico y Social aconsejan al Gobierno.'],
+      ['cgpj', 'jueces', 'El CGPJ gobierna a los jueces y garantiza su independencia.'],
+      ['tc', 'constitucion', 'El Tribunal Constitucional interpreta la Constitución.'],
+    ],
+  },
+  {
+    id: 'investidura', titulo: 'Del voto al Gobierno', corto: 'Cómo se elige al presidente', tarea: 1,
+    subtemas: ['Gobierno y presidentes', 'Cortes Generales y leyes', 'La Corona', 'Participación: elecciones, partidos, sindicatos'],
+    intro: 'Los pasos desde que votas en las elecciones generales hasta que hay Gobierno.',
+    clave: [
+      'Los ciudadanos no votan al presidente: votan diputados, y los diputados eligen al presidente.',
+      'El rey propone al candidato, pero quien decide es el Congreso.',
+      'Una vez elegido, el presidente propone a sus ministros y el rey los nombra.',
+    ],
+    tono: 'a',
+    nodos: {
+      voto: { t: 'Elecciones generales', s: 'Cada 4 años · Las convoca el rey', tono: 'n', d: 'Votan los españoles mayores de 18 años. Se eligen diputados y senadores. El voto es universal, libre, igual, directo y secreto.', kw: [/elecciones generales/, /convoca/, /cada cuatro anos|cada 4 anos/] },
+      congreso: { t: 'Se forma el Congreso', s: '350 diputados', tono: 'm', d: 'Los diputados se eligen por provincias. El Congreso es la cámara donde se elige al presidente.', kw: [/congreso/, /diputad/] },
+      propuesta: { t: 'El rey propone un candidato', s: 'A presidente del Gobierno', tono: 'o', d: 'El rey propone el candidato al Congreso. No lo elige él: solo lo propone.', kw: [/candidato/, /propone al/] },
+      investidura: { t: 'Investidura', s: 'Vota el Congreso', tono: 'm', d: 'El Congreso vota al candidato. Si lo apoya, el candidato es elegido presidente del Gobierno. Al presidente lo elige el Congreso, no el pueblo directamente ni el rey.', kw: [/investidura/, /elige al presidente|elegir al presidente/] },
+      presidente: { t: 'Presidente del Gobierno', s: 'Vive en la Moncloa', d: 'Jefe del Gobierno. Puede perder el cargo si el Congreso aprueba una moción de censura o no le da su confianza (cuestión de confianza).', kw: [/presidente del gobierno/, /moncloa/, /mocion de censura/, /cuestion de confianza/] },
+      ministros: { t: 'Propone a sus ministros', s: 'El rey los nombra', d: 'El presidente elige a sus vicepresidentes y ministros y el rey los nombra.', kw: [/\bministr/, /vicepresident/] },
+      jura: { t: 'Juran o prometen el cargo', s: 'Ante la Constitución, con el rey delante', tono: 'o', d: 'Los miembros del Gobierno juran o prometen su cargo ante la Constitución, en presencia del rey.', kw: [/juran|jurar|prometen|prometer/] },
+    },
+    bloques: [{ tipo: 'flujo', pasos: ['voto', 'congreso', 'propuesta', 'investidura', 'presidente', 'ministros', 'jura'] }],
+    rels: [
+      ['voto', 'congreso', 'Con el voto de los ciudadanos se eligen los diputados del Congreso.'],
+      ['propuesta', 'investidura', 'El candidato que propone el rey se somete a la votación del Congreso.'],
+      ['congreso', 'investidura', 'Los diputados votan en la investidura.'],
+      ['investidura', 'presidente', 'Si el Congreso lo apoya, es presidente del Gobierno.'],
+      ['presidente', 'ministros', 'El presidente propone a los ministros y el rey los nombra.'],
+      ['ministros', 'jura', 'Todos juran o prometen el cargo en presencia del rey.'],
+    ],
+  },
+  {
+    id: 'leyes', titulo: 'Cómo se hace una ley', corto: 'Cómo se hace una ley', tarea: 1,
+    subtemas: ['Cortes Generales y leyes', 'La Corona'],
+    intro: 'Desde que alguien propone una ley hasta que se publica y se aplica.',
+    clave: [
+      'Si la propone el Gobierno es un proyecto de ley; si la proponen otros, una proposición de ley.',
+      'Los ciudadanos pueden proponer leyes reuniendo al menos 500 000 firmas.',
+      'Las leyes las aprueban las Cortes; el rey las sanciona y ordena publicarlas en el BOE.',
+    ],
+    tono: 'm',
+    nodos: {
+      proyecto: { t: 'Proyecto de ley', s: 'Lo propone el Gobierno', tono: 'a', d: 'Cuando la ley la propone el Gobierno se llama proyecto de ley.', kw: [/proyecto de ley/] },
+      proposicion: { t: 'Proposición de ley', s: 'Congreso, Senado, una comunidad o 500 000 ciudadanos', tono: 'n', d: 'Cuando la ley la proponen el Congreso, el Senado, una comunidad autónoma o al menos 500 000 ciudadanos con sus firmas se llama proposición de ley.', kw: [/proposicion de ley/, /500 000|500\.000|quinientas mil/, /firmas/, /proponer (nuevas )?leyes/] },
+      cortes: { t: 'Las Cortes la debaten y la aprueban', s: 'Congreso y Senado', d: 'Las Cortes Generales elaboran, debaten y aprueban las leyes y los Presupuestos Generales del Estado.', kw: [/cortes/, /aprueba/, /presupuestos/, /legislativ/] },
+      rey: { t: 'El rey la sanciona', s: 'La aprueba y ordena publicarla', tono: 'o', d: 'El rey aprueba (sanciona) las leyes y ordena publicarlas.', kw: [/sanciona/, /ordena publicar/] },
+      boe: { t: 'Se publica en el BOE', s: 'Boletín Oficial del Estado', tono: 'g', d: 'Todas las leyes se publican en el Boletín Oficial del Estado (BOE). No confundas: el PAe es el portal de la Administración electrónica y el INE hace estadísticas.', kw: [/\bboe\b/, /boletin oficial/, /publica/] },
+      desarrollo: { t: 'Reglamentos y órdenes ministeriales', s: 'La desarrollan', tono: 'a', d: 'Una ley aprobada necesita desarrollarse con reglamentos u órdenes ministeriales.', kw: [/reglamento/, /ordenes? ministerial/, /desarroll/] },
+      organica: { t: 'Ley orgánica', s: 'Derechos fundamentales y estatutos', d: 'Regula los derechos fundamentales y los estatutos de autonomía, entre otras cosas.', kw: [/ley organica/] },
+      decreto: { t: 'Decreto ley', s: 'La dicta el Gobierno por urgencia', tono: 'a', d: 'Norma que dicta el Gobierno en casos de urgencia.', kw: [/decreto/] },
+      ordinaria: { t: 'Ley ordinaria', s: 'Mayoría simple', d: 'La ley normal: se aprueba por mayoría simple.', kw: [/ley ordinaria/, /mayoria simple/] },
+    },
+    bloques: [
+      { tipo: 'flujo', tit: 'Los pasos', pasos: [['proyecto', 'proposicion'], 'cortes', 'rey', 'boe', 'desarrollo'] },
+      { tipo: 'grupos', tit: 'Tipos de leyes', grupos: [{ n: 'organica' }, { n: 'decreto' }, { n: 'ordinaria' }] },
+    ],
+    rels: [
+      ['proyecto', 'cortes', 'El proyecto de ley del Gobierno pasa a las Cortes.'],
+      ['proposicion', 'cortes', 'La proposición de ley también se debate en las Cortes.'],
+      ['cortes', 'rey', 'Lo que aprueban las Cortes lo sanciona el rey.'],
+      ['rey', 'boe', 'El rey ordena publicar la ley en el BOE.'],
+      ['boe', 'desarrollo', 'Después, la ley se desarrolla con reglamentos y órdenes ministeriales.'],
+    ],
+  },
+  {
+    id: 'territorio', titulo: 'Cómo se organiza el territorio', corto: 'Estado, comunidades y municipios', tarea: 1,
+    subtemas: ['Organización territorial y competencias', 'CCAA, capitales y provincias', 'Lenguas e instituciones lingüísticas'],
+    intro: 'Los tres niveles de Administración y quién se encarga de qué.',
+    clave: [
+      'Tres niveles: central (Estado), autonómica (comunidades) y local (provincias y municipios).',
+      'Ministros = Gobierno de España; consejeros = gobierno autonómico; concejales = ayuntamiento.',
+      'Sanidad y educación = comunidades; extranjería y relaciones internacionales = Estado; agua y alumbrado = ayuntamiento.',
+    ],
+    nodos: {
+      estado: { t: 'Estado', s: 'Administración central · Gobierno de España', tono: 'a', d: 'Lo gobierna el Gobierno de España (presidente y ministros). Competencias exclusivas: nacionalidad, extranjería, inmigración, relaciones internacionales y administración de justicia.', kw: [/\bestado\b/, /\bcentral\b/, /extranjeria/, /inmigracion/, /nacionalidad/, /relaciones internacionales/, /administracion de justicia/] },
+      delegado: { t: 'Delegado del Gobierno', s: 'Representa al Estado en cada comunidad', tono: 'a', d: 'Representa al Estado en cada comunidad autónoma. No es lo mismo que el presidente de la comunidad.', kw: [/delegad/] },
+      ccaa: { t: '17 comunidades autónomas', s: 'Administración autonómica', tono: 'm', d: 'Su ley básica es el Estatuto de Autonomía. Instituciones: asamblea legislativa (parlamento), consejo de gobierno (presidente y consejeros) y presidente. Competencias más importantes: sanidad y educación.', kw: [/comunidad(es)? autonom/, /estatuto/, /sanidad/, /educacion/, /consejer/, /\b17\b/, /autonomic/, /comunidades y ciudades/, /lenguas cooficiales/] },
+      ciudades: { t: 'Ceuta y Melilla', s: '2 ciudades autónomas', tono: 'm', d: 'Las dos ciudades autónomas, en la costa norte de África.', kw: [/ceuta/, /melilla/, /ciudades autonomas/] },
+      provincias: { t: '50 provincias', s: 'Administración local · Diputación', tono: 'v', d: 'Las gobierna la Diputación. En Canarias, los cabildos; en Baleares, los consejos insulares. Las comunidades de una sola provincia no tienen diputación.', kw: [/provincia/, /diputacion/, /cabildo/, /consejos? insular/, /\b50\b/, /\blocal\b/] },
+      municipios: { t: '8132 municipios', s: 'Administración local · Ayuntamiento', tono: 'v', d: 'Los gobierna el ayuntamiento (alcalde y concejales), elegido en las elecciones municipales.', kw: [/municipi/, /ayuntamiento/, /alcalde/, /concejal/, /alumbrado/, /urbanismo/, /\bagua\b/, /instalaciones (culturales|deportivas)/, /8132|8 132|8\.132/, /\blocal\b/] },
+    },
+    bloques: [
+      { tipo: 'org', tit: 'Los tres niveles', filas: [['estado', 'delegado'], ['ccaa', 'ciudades'], ['provincias'], ['municipios']] },
+      { tipo: 'grupos', tit: '¿Quién se encarga de qué?', grupos: [
+        { n: 'estado', items: ['Nacionalidad', 'Extranjería e inmigración', 'Relaciones internacionales', 'Administración de justicia'] },
+        { n: 'ccaa', items: ['Sanidad', 'Educación', 'Enseñanza de su lengua cooficial'] },
+        { n: 'municipios', items: ['Agua y alumbrado', 'Urbanismo', 'Medio ambiente', 'Patrimonio histórico', 'Instalaciones culturales y deportivas'] },
+      ] },
+    ],
+    rels: [
+      ['estado', 'ccaa', 'El Estado es una patria común e indivisible, pero reconoce la autonomía de nacionalidades y regiones.'],
+      ['delegado', 'ccaa', 'El delegado del Gobierno representa al Estado en cada comunidad autónoma.'],
+      ['estado', 'delegado', 'El delegado del Gobierno representa al Estado, no a la comunidad.'],
+      ['ccaa', 'provincias', 'Las comunidades autónomas se dividen en provincias (algunas tienen una sola).'],
+      ['provincias', 'municipios', 'Provincias y municipios son la Administración local, no la autonómica.'],
+    ],
+  },
+  {
+    id: 'ccaa', titulo: 'Comunidades, capitales y provincias', corto: 'Comunidades y provincias', tarea: 3,
+    subtemas: ['CCAA, capitales y provincias', 'Organización territorial y competencias'],
+    intro: 'Cada comunidad autónoma con su capital y las provincias que tiene dentro.',
+    clave: [
+      'Mérida (Extremadura) y Santiago de Compostela (Galicia) son capitales autonómicas pero no de provincia.',
+      'Canarias tiene capitalidad compartida; Castilla y León y el País Vasco no tienen capital declarada.',
+      'Castilla y León (Burgos, Valladolid, León…) no es Castilla-La Mancha (Toledo, Cuenca, Guadalajara…).',
+    ],
+    tono: 'm',
+    nodos: {
+      andalucia: { t: 'Andalucía', s: 'Capital: Sevilla', kw: [/andaluc/, /almeria/, /cadiz/, /cordoba/, /granada/, /huelva/, /jaen/, /malaga/, /sevilla/] },
+      aragon: { t: 'Aragón', s: 'Capital: Zaragoza', kw: [/aragon/, /huesca/, /teruel/, /zaragoza/] },
+      asturias: { t: 'Principado de Asturias', s: 'Capital: Oviedo', kw: [/asturias/, /oviedo/] },
+      baleares: { t: 'Islas Baleares', s: 'Capital: Palma de Mallorca', kw: [/baleares/, /palma/, /mallorca/] },
+      canarias: { t: 'Canarias', s: 'Capital compartida', kw: [/canarias/, /las palmas/, /tenerife/] },
+      cantabria: { t: 'Cantabria', s: 'Capital: Santander', kw: [/cantabria/, /santander/] },
+      clm: { t: 'Castilla-La Mancha', s: 'Capital: Toledo', kw: [/la mancha/, /albacete/, /ciudad real/, /cuenca/, /guadalajara/, /toledo/] },
+      cyl: { t: 'Castilla y León', s: 'Sin capital oficial (sede: Valladolid)', kw: [/castilla y leon/, /avila/, /burgos/, /\bleon\b/, /palencia/, /salamanca/, /segovia/, /soria/, /valladolid/, /zamora/] },
+      cataluna: { t: 'Cataluña', s: 'Capital: Barcelona', kw: [/cataluna/, /barcelona/, /gerona|girona/, /lerida|lleida/, /tarragona/] },
+      valencia: { t: 'Comunidad Valenciana', s: 'Capital: Valencia', kw: [/valencia/, /alicante/, /castellon/] },
+      extremadura: { t: 'Extremadura', s: 'Capital: Mérida', kw: [/extremadura/, /merida/, /badajoz/, /caceres/] },
+      galicia: { t: 'Galicia', s: 'Capital: Santiago de Compostela', kw: [/galicia/, /santiago de compostela/, /coruna/, /lugo/, /orense|ourense/, /pontevedra/] },
+      rioja: { t: 'La Rioja', s: 'Capital: Logroño', kw: [/rioja/, /logrono/] },
+      madrid: { t: 'Comunidad de Madrid', s: 'Capital: Madrid', kw: [/madrid/] },
+      murcia: { t: 'Región de Murcia', s: 'Capital: Murcia', kw: [/murcia/] },
+      navarra: { t: 'Comunidad Foral de Navarra', s: 'Capital: Pamplona', kw: [/navarra/, /pamplona/] },
+      paisvasco: { t: 'País Vasco', s: 'Sin capital declarada (sede: Vitoria)', kw: [/pais vasco/, /vitoria/, /alava/, /guipuzcoa/, /vizcaya/] },
+      ceuta: { t: 'Ceuta', s: 'Ciudad autónoma', tono: 'n', kw: [/ceuta/] },
+      melilla: { t: 'Melilla', s: 'Ciudad autónoma', tono: 'n', kw: [/melilla/] },
+    },
+    bloques: [
+      { tipo: 'grupos', grupos: [
+        { n: 'andalucia', items: ['Almería', 'Cádiz', 'Córdoba', 'Granada', 'Huelva', 'Jaén', 'Málaga', 'Sevilla'] },
+        { n: 'aragon', items: ['Huesca', 'Teruel', 'Zaragoza'] },
+        { n: 'asturias', items: ['Asturias (una sola provincia)'] },
+        { n: 'baleares', items: ['Baleares (una sola provincia)'] },
+        { n: 'canarias', items: ['Las Palmas', 'Santa Cruz de Tenerife'] },
+        { n: 'cantabria', items: ['Cantabria (una sola provincia)'] },
+        { n: 'clm', items: ['Albacete', 'Ciudad Real', 'Cuenca', 'Guadalajara', 'Toledo'] },
+        { n: 'cyl', items: ['Ávila', 'Burgos', 'León', 'Palencia', 'Salamanca', 'Segovia', 'Soria', 'Valladolid', 'Zamora'] },
+        { n: 'cataluna', items: ['Barcelona', 'Gerona', 'Lérida', 'Tarragona'] },
+        { n: 'valencia', items: ['Alicante', 'Castellón', 'Valencia'] },
+        { n: 'extremadura', items: ['Badajoz', 'Cáceres'] },
+        { n: 'galicia', items: ['La Coruña', 'Lugo', 'Orense', 'Pontevedra'] },
+        { n: 'rioja', items: ['La Rioja (una sola provincia)'] },
+        { n: 'madrid', items: ['Madrid (una sola provincia)'] },
+        { n: 'murcia', items: ['Murcia (una sola provincia)'] },
+        { n: 'navarra', items: ['Navarra (una sola provincia)'] },
+        { n: 'paisvasco', items: ['Álava', 'Guipúzcoa', 'Vizcaya'] },
+        { n: 'ceuta', items: ['Costa norte de África'] },
+        { n: 'melilla', items: ['Costa norte de África'] },
+      ] },
+    ],
+    rels: [],
+  },
+  {
+    id: 'seguridad', titulo: 'Fuerzas Armadas y policías', corto: 'Fuerzas Armadas y policías', tarea: 1,
+    subtemas: ['Fuerzas Armadas y de Seguridad', 'La Corona', 'Documentos y trámites personales'],
+    intro: 'Quién manda en cada cuerpo y de qué se ocupa cada uno.',
+    clave: [
+      'Mando supremo de las Fuerzas Armadas: el rey. Las dirige el Ministerio de Defensa.',
+      'Policía Nacional y Guardia Civil están en toda España y su mando es el ministro del Interior.',
+      'La Guardia Civil NO es Fuerzas Armadas: es una fuerza de seguridad.',
+      'Tráfico en carretera = Guardia Civil; tráfico en la ciudad = Policía local.',
+    ],
+    nodos: {
+      rey: { t: 'El rey', s: 'Mando supremo', tono: 'o', d: 'El rey tiene el mando supremo de las Fuerzas Armadas (no el presidente ni el ministro de Defensa).', kw: [/mando supremo/, /maxima autoridad/] },
+      defensa: { t: 'Ministerio de Defensa', s: 'Las dirige', tono: 'a', d: 'La dirección de las Fuerzas Armadas corresponde al Ministerio de Defensa, dentro del Gobierno.', kw: [/defensa/] },
+      ffaa: { t: 'Fuerzas Armadas', s: 'Ejército de Tierra, Ejército del Aire y Armada', tono: 'a', d: 'Garantizan la autoridad y la independencia de España y defienden su integridad territorial y el orden constitucional. Participan en misiones de paz de la ONU desde 1989.', kw: [/fuerzas armadas/, /ejercito/, /armada/, /mision(es)? de paz/, /integridad territorial/, /\bonu\b/] },
+      interior: { t: 'Ministro del Interior', s: 'Mando superior', tono: 'a', d: 'Es el mando superior de las Fuerzas y Cuerpos de Seguridad del Estado: Policía Nacional y Guardia Civil.', kw: [/interior/] },
+      pn: { t: 'Policía Nacional', s: 'En toda España', tono: 'a', d: 'DNI y pasaporte, extranjería (documentos, permisos de residencia y trabajo) y control de entrada y salida de España.', kw: [/policia nacional/, /cuerpo nacional de policia/, /\bdni\b/, /pasaporte/, /extranjeria/, /residencia y trabajo/, /comisaria/] },
+      gc: { t: 'Guardia Civil', s: 'En toda España', tono: 'a', d: 'Tráfico en carreteras (vías interurbanas), puertos, aeropuertos, fronteras y costas.', kw: [/guardia civil/, /carretera/, /interurban/, /costas?/, /puertos?/, /aeropuertos?/] },
+      ertzaintza: { t: 'Ertzaintza', s: 'País Vasco', tono: 'm', kw: [/ertzaintza/, /pais vasco/] },
+      mossos: { t: 'Mossos d’Esquadra', s: 'Cataluña', tono: 'm', kw: [/mossos/, /cataluna/] },
+      foral: { t: 'Policía Foral', s: 'Navarra', tono: 'm', kw: [/foral/, /navarra/] },
+      pcanarias: { t: 'Policía de Canarias', s: 'Canarias', tono: 'm', kw: [/policia (de )?canari/] },
+      local: { t: 'Policía local', s: 'De cada ayuntamiento', tono: 'v', d: 'Protege las instituciones locales, regula el tráfico en pueblos y ciudades y ayuda en accidentes.', kw: [/policia (local|municipal)/, /trafico en (la|las) ciudad/, /accidente/] },
+    },
+    bloques: [
+      { tipo: 'org', filas: [
+        { cols: [
+          { tit: 'Defensa', tono: 'a', items: ['rey', 'defensa', '>ffaa'] },
+          { tit: 'Seguridad: toda España', tono: 'a', items: ['interior', '>pn', '>gc'] },
+        ] },
+      ] },
+      { tipo: 'org', tit: 'Otras policías', filas: [
+        { cols: [
+          { tit: 'Autonómicas', tono: 'm', items: ['ertzaintza', 'mossos', 'foral', 'pcanarias'] },
+          { tit: 'Local', tono: 'v', items: ['local'] },
+        ] },
+      ] },
+    ],
+    rels: [
+      ['rey', 'ffaa', 'El rey tiene el mando supremo de las Fuerzas Armadas.'],
+      ['defensa', 'ffaa', 'El Ministerio de Defensa dirige las Fuerzas Armadas.'],
+      ['interior', 'pn', 'El ministro del Interior es el mando superior de la Policía Nacional y de la Guardia Civil.'],
+      ['interior', 'gc', 'El ministro del Interior es el mando superior de la Policía Nacional y de la Guardia Civil.'],
+    ],
+  },
+  {
+    id: 'lenguas', titulo: 'Lenguas y quién las cuida', corto: 'Lenguas e instituciones', tarea: 1,
+    subtemas: ['Lenguas e instituciones lingüísticas'],
+    intro: 'Dónde es oficial cada lengua, quién fija sus normas y quién la difunde.',
+    clave: [
+      'El castellano es oficial en toda España; las demás lenguas, también en sus comunidades.',
+      'Academia = normas (normalización). Instituto = difusión. La RAE normaliza, el Cervantes difunde.',
+      'Bable (Asturias), aragonés y murciano NO son lenguas cooficiales.',
+    ],
+    tono: 'm',
+    nodos: {
+      castellano: { t: 'Castellano o español', s: 'Oficial en toda España', tono: 'a', d: 'Todos los españoles tienen el derecho de usarlo y el deber de conocerlo. También es oficial en las comunidades con lengua propia.', kw: [/castellano/, /real academia espanola|\brae\b/, /cervantes/, /en toda espana/, /deber de conocer/, /oficial del estado/] },
+      catalan: { t: 'Catalán', s: 'Cataluña e Islas Baleares', d: 'Cooficial en Cataluña e Islas Baleares (y en la Comunidad Valenciana, donde se llama valenciano).', kw: [/catalan/, /estudis catalans/, /ramon llull/, /estudis balearics/] },
+      valenciano: { t: 'Valenciano', s: 'Comunidad Valenciana', kw: [/valencian/, /academia valenciana/] },
+      gallego: { t: 'Gallego', s: 'Galicia', kw: [/gallego/, /galicia/, /academia galega/] },
+      euskera: { t: 'Vasco o euskera', s: 'País Vasco y Navarra', kw: [/euskera/, /\bvasco\b/, /euskaltzaindia/, /etxepare/, /euskarabidea/, /vascuence/] },
+      aranes: { t: 'Aranés', s: 'Cataluña (Valle de Arán)', kw: [/aranes/, /\baran\b/] },
+      no: { t: 'No son cooficiales', s: 'Bable, aragonés, murciano', tono: 'g', kw: [/bable/, /aragones/, /murciano/] },
+    },
+    bloques: [
+      { tipo: 'grupos', grupos: [
+        { n: 'castellano', items: ['Normas: Real Academia Española (RAE)', 'Difusión: Instituto Cervantes'] },
+        { n: 'catalan', items: ['Normas: Institut d’Estudis Catalans', 'Difusión: Institut Ramon Llull e Institut d’Estudis Baleàrics'] },
+        { n: 'valenciano', items: ['Normas: Acadèmia Valenciana de la Llengua', 'Difusión: Direcció General de Política Lingüística'] },
+        { n: 'gallego', items: ['Normas: Real Academia Galega', 'Difusión: Secretaría Xeral de Política Lingüística'] },
+        { n: 'euskera', items: ['Normas: Euskaltzaindia', 'Difusión: Instituto Vasco Etxepare e Instituto Navarro del Vascuence'] },
+        { n: 'aranes', items: ['Cooficial en Cataluña'] },
+        { n: 'no', items: ['No son oficiales en ninguna comunidad'] },
+      ] },
+    ],
+    rels: [['catalan', 'valenciano', 'En la Comunidad Valenciana el catalán se llama valenciano.']],
+  },
+  {
+    id: 'elecciones', titulo: 'Elecciones: qué se vota', corto: 'Tipos de elecciones', tarea: 1,
+    subtemas: ['Participación: elecciones, partidos, sindicatos', 'Nacionalidad y voto', 'Asociación, partidos, sindicatos y huelga', 'UE y organismos internacionales'],
+    intro: 'Cada tipo de elección, cada cuánto se celebra, qué se elige y quién vota.',
+    clave: [
+      'El voto es un derecho, no una obligación: universal, libre, igual, directo y secreto.',
+      'Votan los españoles mayores de 18 años. Las elecciones las convoca el rey.',
+      'Generales, autonómicas y municipales: cada 4 años. Europeas: cada 5.',
+      'Los extranjeros de la UE y de países con acuerdo solo votan en las municipales.',
+    ],
+    nodos: {
+      generales: { t: 'Generales', s: 'Cada 4 años', tono: 'a', kw: [/generales/, /diputados y senadores/] },
+      autonomicas: { t: 'Autonómicas', s: 'Cada 4 años', tono: 'm', kw: [/autonomicas/, /parlamentos? autonomic/] },
+      municipales: { t: 'Municipales', s: 'Cada 4 años', tono: 'v', kw: [/municipales/, /concejal/, /alcalde/, /residentes de la union europea/] },
+      europeas: { t: 'Europeas', s: 'Cada 5 años', tono: 'n', kw: [/elecciones europeas/, /eurodiputad/, /parlamento europeo/, /cinco anos|5 anos/] },
+      voto: { t: 'El voto', s: 'Un derecho, desde los 18 años', tono: 'o', d: 'Votar es un derecho, no una obligación. Pueden votar y ser elegidos los españoles mayores de 18 años; un español por residencia vota igual que cualquier otro, sin esperar ningún plazo. Solo una sentencia judicial puede quitar el derecho al voto.', kw: [/\bvot(o|ar)\b/, /18 anos/, /sufragio/] },
+      partidos: { t: 'Partidos, sindicatos y asociaciones', s: 'Participar en la vida pública', tono: 'g', d: 'España tiene un sistema pluripartidista: hay muchos partidos (PSOE, PP; antes UCD). Su funcionamiento debe ser democrático. Los sindicatos defienden a los trabajadores y participan en el Consejo Económico y Social. Las asociaciones deben inscribirse en un registro.', kw: [/partido/, /sindicat/, /asociaci/, /\bpp\b/, /huelga/] },
+    },
+    bloques: [
+      { tipo: 'grupos', grupos: [
+        { n: 'generales', items: ['Se eligen diputados (Congreso) y senadores', 'Votan los españoles mayores de 18 años'] },
+        { n: 'autonomicas', items: ['Se elige el parlamento de cada comunidad', 'Votan los españoles mayores de 18 años'] },
+        { n: 'municipales', items: ['Se eligen los concejales, y así el ayuntamiento y su alcalde', 'También votan residentes de la UE y de algunos países con acuerdo'] },
+        { n: 'europeas', items: ['Se eligen los eurodiputados españoles del Parlamento Europeo'] },
+      ] },
+      { tipo: 'grupos', tit: 'Cómo se participa', grupos: [
+        { n: 'voto', items: ['Universal, libre, igual, directo y secreto', 'Es un derecho, no una obligación', 'Las elecciones las convoca el rey'] },
+        { n: 'partidos', items: ['Muchos partidos: sistema pluripartidista', 'Sindicato = defiende a los trabajadores', 'Asociación = término general'] },
+      ] },
+    ],
+    rels: [],
+  },
+  {
+    id: 'democracia', titulo: 'La democracia, año a año', corto: 'Fechas de la democracia', tarea: 1,
+    subtemas: ['La Corona', 'Gobierno y presidentes', 'Constitución, valores y forma de Estado', 'UE y organismos internacionales', 'Fuerzas Armadas y de Seguridad', 'Historia'],
+    intro: 'Las fechas clave desde 1975 y todos los presidentes del Gobierno.',
+    clave: [
+      '1975 empieza Juan Carlos I; 1978 Constitución; 1986 entrada en la CEE; 2014 empieza Felipe VI.',
+      '7 presidentes de 3 partidos (UCD, PSOE y PP). El primero, Adolfo Suárez.',
+    ],
+    nodos: {
+      jc: { t: 'Juan Carlos I, rey', s: 'Reina de 1975 a 2014', tono: 'o', d: 'Impulsó el proceso hacia la democracia (la Transición).', kw: [/juan carlos/, /1975/] },
+      e77: { t: 'Primeras elecciones democráticas', tono: 'n', kw: [/1977/, /primeras elecciones/] },
+      c78: { t: 'Referéndum de la Constitución', s: '6 de diciembre · 88 % a favor', tono: 'n', d: 'Fue el primer referéndum de la democracia.', kw: [/1978/, /6 de diciembre/, /referendum/] },
+      cee: { t: 'Entrada en la CEE (hoy UE)', s: '1 de enero', tono: 'n', kw: [/1986/, /\bcee\b|comunidad economica europea/, /entro en la (union europea|ue)/] },
+      onu: { t: 'Primera misión de paz de la ONU', s: 'Y primera presidencia de la UE', tono: 'n', d: 'Las Fuerzas Armadas participan en misiones de paz de la ONU desde 1989. España ha presidido el Consejo de la UE en 1989, 1995, 2002, 2010 y 2023.', kw: [/1989/, /presidencia/] },
+      j92: { t: 'Olimpiadas de Barcelona y Expo de Sevilla', tono: 'n', kw: [/1992/, /olimpiada/, /expo/] },
+      f6: { t: 'Felipe VI, rey', s: 'Desde el 19 de junio', tono: 'o', d: 'Hijo de Juan Carlos I.', kw: [/felipe vi\b/, /2014/] },
+      suarez: { t: 'Adolfo Suárez', s: 'UCD', tono: 'g', d: 'Primer presidente del Gobierno de la democracia.', kw: [/suarez/] },
+      calvo: { t: 'Leopoldo Calvo-Sotelo', s: 'UCD', tono: 'g', kw: [/calvo.sotelo/] },
+      gonzalez: { t: 'Felipe González', s: 'PSOE', tono: 'm', kw: [/felipe gonzalez/] },
+      aznar: { t: 'José María Aznar', s: 'PP', tono: 'a', kw: [/aznar/] },
+      zapatero: { t: 'José Luis Rodríguez Zapatero', s: 'PSOE', tono: 'm', kw: [/zapatero/] },
+      rajoy: { t: 'Mariano Rajoy', s: 'PP', tono: 'a', kw: [/rajoy/] },
+      sanchez: { t: 'Pedro Sánchez', s: 'PSOE', tono: 'm', kw: [/pedro sanchez/] },
+    },
+    bloques: [
+      { tipo: 'linea', tit: 'Fechas clave', hitos: [['1975', 'jc'], ['1977', 'e77'], ['1978', 'c78'], ['1986', 'cee'], ['1989', 'onu'], ['1992', 'j92'], ['2014', 'f6']] },
+      { tipo: 'linea', tit: 'Presidentes del Gobierno', hitos: [['1979–1981', 'suarez'], ['1981–1982', 'calvo'], ['1982–1996', 'gonzalez'], ['1996–2004', 'aznar'], ['2004–2011', 'zapatero'], ['2011–2018', 'rajoy'], ['2018–', 'sanchez']] },
+    ],
+    rels: [['jc', 'f6', 'Felipe VI es hijo de Juan Carlos I y le sucedió en 2014.']],
+  },
+  {
+    id: 'historia', titulo: 'Historia de España en fechas', corto: 'Línea del tiempo', tarea: 4,
+    subtemas: ['Historia'],
+    intro: 'Las fechas del manual, de la Edad Media a hoy.',
+    clave: [
+      'Toledo, ciudad de las tres culturas: cristiana, judía y musulmana. Córdoba, centro de ciencia de Al-Ándalus.',
+      '1492: Colón llega a América, se conquista Granada y se publica la primera gramática castellana.',
+    ],
+    tono: 'n',
+    nodos: {
+      cordoba: { t: 'Al-Ándalus: Córdoba', s: 'Gran centro de cultura y ciencia', d: 'Medicina, filosofía, matemáticas y astronomía.', kw: [/al.andalus/, /cordoba/] },
+      toledo: { t: 'Alfonso X: Toledo', s: 'Ciudad de las tres culturas', d: 'Judía, musulmana y cristiana.', kw: [/1252/, /alfonso x\b/, /toledo/, /tres culturas/] },
+      h1492: { t: 'Colón llega a América', s: 'Conquista de Granada · primera gramática castellana', kw: [/1492/, /colon/, /reyes catolicos/, /gramatica/] },
+      h1519: { t: 'Primera vuelta al mundo', s: 'Magallanes y Elcano', kw: [/1519/, /magallanes/, /elcano/, /vuelta al mundo/] },
+      imperio: { t: 'Imperio español', s: 'Carlos I y Felipe II', d: 'Carlos I fue el primer rey de España.', kw: [/imperio/, /carlos i\b/, /felipe ii\b/] },
+      sucesion: { t: 'Guerra de Sucesión', s: 'Gana Felipe V (Borbón)', kw: [/sucesion/, /felipe v\b/, /borbon/] },
+      independencia: { t: 'Guerra de Independencia', s: 'Contra Francia', kw: [/guerra de (la )?independencia/, /1808/] },
+      h1898: { t: 'Desastre del 98', s: 'Se pierden Cuba, Puerto Rico, Filipinas y Guam', kw: [/1898/, /cuba/, /desastre/] },
+      civil: { t: 'Guerra Civil', kw: [/guerra civil/, /1936/] },
+      franquismo: { t: 'Franquismo', kw: [/franquismo|franco/] },
+      transicion: { t: 'Transición', s: 'Adolfo Suárez (UCD)', kw: [/transicion/] },
+      c78: { t: 'Referéndum de la Constitución', s: '6 de diciembre · 88 % a favor', kw: [/1978/, /constitucion/] },
+      cee: { t: 'Entrada en la CEE', s: '1 de enero', kw: [/1986/, /\bcee\b/] },
+      h1992: { t: 'Olimpiadas de Barcelona, Expo de Sevilla y AVE', kw: [/1992/, /olimpiada/, /\bave\b/] },
+      f6: { t: 'Felipe VI, rey', kw: [/2014/, /felipe vi\b/] },
+    },
+    bloques: [
+      { tipo: 'linea', hitos: [['Edad Media', 'cordoba'], ['1252', 'toledo'], ['1492', 'h1492'], ['1519', 'h1519'], ['s. XVI–XVII', 'imperio'], ['1705–1715', 'sucesion'], ['1808–1814', 'independencia'], ['1898', 'h1898'], ['1936–1939', 'civil'], ['1939–1975', 'franquismo'], ['1975–1982', 'transicion'], ['1978', 'c78'], ['1986', 'cee'], ['1992', 'h1992'], ['2014', 'f6']] },
+    ],
+    rels: [],
+  },
+  {
+    id: 'tramites', titulo: '¿Dónde se hace cada trámite?', corto: 'Dónde se hace cada trámite', tarea: 5,
+    subtemas: ['Documentos y trámites personales', 'Administración electrónica'],
+    intro: 'Cada documento con la oficina que lo da y de quién depende.',
+    clave: [
+      'DNI, TIE y pasaporte: en la comisaría de policía (Ministerio del Interior).',
+      'Empadronamiento: en el Ayuntamiento. Nacimientos, matrimonios y nacionalidad: en el Registro Civil.',
+      'Por internet, con DNI electrónico, certificado digital o Cl@ve, a cualquier hora.',
+    ],
+    nodos: {
+      comisaria: { t: 'Comisaría de policía', s: 'Policía Nacional · Ministerio del Interior', tono: 'a', kw: [/comisaria/, /\bdni\b/, /\btie\b/, /pasaporte/, /tarjeta de identidad de extranjero/, /policia/] },
+      ayto: { t: 'Ayuntamiento', s: 'Administración local', tono: 'v', kw: [/empadrona/, /padron/, /ayuntamiento/] },
+      registro: { t: 'Registro Civil', s: 'Ministerio de Justicia', tono: 'm', kw: [/registro civil/, /libro de familia/, /nacimiento/, /matrimonio/, /nacionalidad/, /registro electronico/] },
+      salud: { t: 'Centro de salud', s: 'Sanidad pública', tono: 'n', kw: [/tarjeta sanitaria/, /centro de salud/] },
+      dgt: { t: 'DGT', s: 'Dirección General de Tráfico', tono: 'a', kw: [/carne de conducir|permiso de conducir/, /\bdgt\b/] },
+      tgss: { t: 'Tesorería de la Seguridad Social', tono: 'a', kw: [/seguridad social/] },
+      sede: { t: 'Sede electrónica', s: 'Por internet, a cualquier hora', tono: 'g', d: 'Cada ministerio u organismo tiene su sede electrónica. Para usarla necesitas una identidad digital (DNI electrónico, certificado digital o Cl@ve), que sirve como firma electrónica.', kw: [/sede electronica/, /internet/, /cl@ve|\bclave\b/, /certificado digital/, /firma electronica/, /en linea/, /\b060\b/] },
+    },
+    bloques: [
+      { tipo: 'grupos', grupos: [
+        { n: 'comisaria', items: ['DNI (españoles, obligatorio desde los 14 años)', 'TIE (extranjeros que viven en España)', 'Pasaporte (viajar fuera de la UE y de Schengen)'] },
+        { n: 'ayto', items: ['Certificado de empadronamiento (dónde vives)'] },
+        { n: 'registro', items: ['Nacimientos, matrimonios y divorcios', 'Certificado de nacimiento', 'Trámites de nacionalidad', 'Libro de familia (hoy, registro electrónico individual)'] },
+        { n: 'salud', items: ['Tarjeta sanitaria'] },
+        { n: 'dgt', items: ['Carné de conducir'] },
+        { n: 'tgss', items: ['Número de la Seguridad Social (para trabajar y cotizar)'] },
+        { n: 'sede', items: ['Pagar tasas e impuestos, pedir certificados, padrón, ayudas', 'Con DNI electrónico, certificado digital o Cl@ve'] },
+      ] },
+    ],
+    rels: [],
+  },
+  {
+    id: 'geografia', titulo: 'Ríos, montañas y climas', corto: 'Ríos, montañas y climas', tarea: 3,
+    subtemas: ['Ríos y mares', 'Relieve', 'Clima'],
+    intro: 'Adónde va cada río, el orden de los picos más altos y el clima de cada zona.',
+    clave: [
+      'Al Atlántico: Miño, Duero, Tajo, Guadiana y Guadalquivir. Al Mediterráneo: Ebro, Júcar, Segura y Turia.',
+      'Picos más altos: 1.º Teide (Canarias), 2.º Mulhacén (Sierra Nevada), 3.º Aneto (Pirineos).',
+      'Madrid tiene clima continental; Canarias, subtropical.',
+    ],
+    nodos: {
+      atlantico: { t: 'Océano Atlántico', s: 'Ríos e islas', tono: 'a', kw: [/atlantico/, /\bmino\b/, /duero/, /tajo/, /guadiana/, /guadalquivir/] },
+      mediterraneo: { t: 'Mar Mediterráneo', s: 'Ríos e islas', tono: 'n', kw: [/mediterraneo/, /\bebro\b/, /jucar/, /segura/, /turia/] },
+      cantabrico: { t: 'Mar Cantábrico', s: 'Costa norte', tono: 'v', kw: [/cantabrico/] },
+      picos: { t: 'Picos más altos', s: 'De mayor a menor', tono: 'm', kw: [/teide/, /mulhacen/, /aneto/, /mas alto/, /\bpico/, /monte/] },
+      montes: { t: 'Montañas y Meseta', s: 'De norte a sur', tono: 'm', kw: [/meseta/, /pirineos/, /sistema (central|betico|penibetico)/, /cordillera/, /montanos/, /altitud/] },
+      oceanico: { t: 'Oceánico', s: 'Norte', tono: 'v', kw: [/oceanico/] },
+      medclima: { t: 'Mediterráneo', s: 'Costa mediterránea', tono: 'n', kw: [/clima mediterraneo/] },
+      continental: { t: 'Continental', s: 'Centro (Madrid)', tono: 'o', kw: [/continental/, /inviernos frios/, /madrid/] },
+      subtropical: { t: 'Subtropical', s: 'Canarias', tono: 'a', kw: [/subtropical/] },
+    },
+    bloques: [
+      { tipo: 'grupos', tit: '¿Adónde va cada río?', grupos: [
+        { n: 'atlantico', items: ['Miño', 'Duero', 'Tajo', 'Guadiana', 'Guadalquivir', 'Islas Canarias'] },
+        { n: 'mediterraneo', items: ['Ebro (el principal)', 'Júcar', 'Segura', 'Turia', 'Islas Baleares'] },
+        { n: 'cantabrico', items: ['Baña las comunidades del norte'] },
+      ] },
+      { tipo: 'grupos', tit: 'Relieve', grupos: [
+        { n: 'picos', items: ['1.º Teide, volcán en Tenerife (Canarias)', '2.º Mulhacén, Sierra Nevada', '3.º Aneto, Pirineos'] },
+        { n: 'montes', items: ['Pirineos', 'Sistema Central (cruza la Meseta)', 'Sistemas Bético y Penibético', 'Meseta: llanura alta del centro, más de 600 m'] },
+      ] },
+      { tipo: 'grupos', tit: 'Climas', grupos: [
+        { n: 'oceanico', items: ['Temperaturas suaves', 'Llueve mucho'] },
+        { n: 'medclima', items: ['Inviernos suaves, veranos calurosos', 'Poca lluvia (a veces intensa)'] },
+        { n: 'continental', items: ['Inviernos fríos, veranos muy calurosos', 'A veces nieva'] },
+        { n: 'subtropical', items: ['Suave todo el año', 'Media de 22 ºC'] },
+      ] },
+    ],
+    rels: [],
+  },
+];
+/* ESQUEMAS-FIN */
+const ESQ = Object.create(null);
+ESQUEMAS.forEach(e => { ESQ[e.id] = e; });
+// Índice pregunta ↔ esquema: un esquema se relaciona con una pregunta si cubre su subtema;
+// los nodos se resaltan si sus palabras clave aparecen en el enunciado o en la respuesta correcta.
+const PREG_ESQ = Object.create(null);   // id pregunta -> [{e, nodos}]
+const NODO_PREG = Object.create(null);  // 'esquema/nodo' -> [ids]
+const ESQ_PREG = Object.create(null);   // esquema -> [ids]
+function indexarEsquemas() {
+  for (const q of D.questions) {
+    const txt = normaliza(q.q + ' ' + q.opts[q.ans]);
+    const res = [];
+    for (const e of ESQUEMAS) {
+      if (!e.subtemas.includes(q.subtema)) continue;
+      const nodos = Object.keys(e.nodos).filter(n => (e.nodos[n].kw || []).some(r => r.test(txt)));
+      res.push({ e: e.id, nodos, propio: e.subtemas[0] === q.subtema });
+      (ESQ_PREG[e.id] = ESQ_PREG[e.id] || []).push(q.id);
+      nodos.forEach(n => { const k = e.id + '/' + n; (NODO_PREG[k] = NODO_PREG[k] || []).push(q.id); });
+    }
+    // Primero los esquemas donde la pregunta encaja en más nodos; a igualdad, el esquema principal del subtema
+    res.forEach(r => { r.peso = r.nodos.length * 2 + (r.propio ? 1 : 0); });
+    res.sort((a, b) => b.peso - a.peso);
+    PREG_ESQ[q.id] = res;
+  }
+}
+indexarEsquemas();
+const ESQ_SUB = sub => ESQUEMAS.filter(e => e.subtemas.includes(sub));
+// Esquemas que se ofrecen desde una pregunta: los que la sitúan en algún nodo (hasta 3);
+// si ninguno, el esquema principal de su subtema.
+function esquemasDePregunta(id) {
+  const r = PREG_ESQ[id] || [];
+  const con = r.filter(x => x.nodos.length).slice(0, 3);
+  return con.length ? con : r.filter(x => x.propio).slice(0, 1);
+}
+
 
 const CUPO = { 1: 10, 2: 3, 3: 2, 4: 3, 5: 7 };
 const REGLAS = { 1: { max: 3, min: 6 }, 2: { max: 1, min: 3 }, 3: { max: 1, min: 2 }, 4: { max: 2, min: 2 }, 5: { max: 2, min: 5 } };
@@ -412,6 +995,7 @@ const ICON = {
   chev: () => `<svg class="chev" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5 l7 7 -7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   bombilla: () => `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="var(--amarillo-suave)" stroke="var(--tinta-2)" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
   lupa: () => `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+  esquema: () => `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="8.5" y="2.5" width="7" height="5" rx="1.2"/><rect x="2.5" y="16.5" width="7" height="5" rx="1.2"/><rect x="14.5" y="16.5" width="7" height="5" rx="1.2"/><path d="M12 7.5v4.5M6 16.5V12h12v4.5"/></g></svg>`,
   tabCamino: () => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20 C5 14 19 14 19 8 M19 8 l-3 -3 M19 8 l-3 3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5" cy="20" r="2" fill="currentColor"/></svg>`,
   tabExamen: () => `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 8 h7 M8.5 12 h7 M8.5 16 h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
   tabRepaso: () => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 a8 8 0 1 0 2.4 -5.7 M4 4 v4 h4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -813,12 +1397,12 @@ function render() {
   const tabbar = $('#tabbar');
   tabbar.hidden = !!enSesion || pantalla === 'resumen';
   tabbar.innerHTML = TABS.map(t => `<button class="tab" data-ir="${t.id}" ${tabActiva() === t.id ? 'aria-current="page"' : ''}>${t.icon()}<span>${t.label}</span></button>`).join('');
-  const vistas = { camino: vCamino, sesion: vSesion, resumen: vResumen, simulacro: vSimulacro, repaso: vRepaso, biblioteca: vBiblioteca, progreso: vProgreso };
+  const vistas = { camino: vCamino, sesion: vSesion, resumen: vResumen, simulacro: vSimulacro, repaso: vRepaso, biblioteca: vBiblioteca, esquema: vEsquema, progreso: vProgreso };
   app.innerHTML = (vistas[pantalla] || vCamino)();
   if (pantalla === 'sesion' && S.active && S.active.tipo === 'simulacro' && S.active.fase === 'responder') arrancarReloj(S.active);
   if (pantalla === 'sesion' && S.active && S.active.tipo === 'simulacro' && S.active.fase === 'explicar' && !S.active.pausa) arrancarReloj(S.active);
 }
-function tabActiva() { return ['camino', 'simulacro', 'repaso', 'biblioteca', 'progreso'].includes(pantalla) ? pantalla : (pantalla === 'resumen' ? '' : 'camino'); }
+function tabActiva() { if (pantalla === 'esquema') return 'biblioteca'; return ['camino', 'simulacro', 'repaso', 'biblioteca', 'progreso'].includes(pantalla) ? pantalla : (pantalla === 'resumen' ? '' : 'camino'); }
 function aplicarAjustes() {
   const r = document.documentElement;
   if (S.settings.theme === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', S.settings.theme);
@@ -981,7 +1565,8 @@ function explicacionHTML(q, eleccion, ok, modoLectura = false) {
   if (herm.length) mas += `<div class="explica-bloque"><h3>No la confundas con</h3>${herm.map(x => `<div class="hermana">${esc(Q[x].q)}<br><span class="r">${esc(Q[x].opts[Q[x].ans])}</span></div>`).join('')}</div>`;
   if (mas) h += ok && !modoLectura ? `<details class="mas-info explica-bloque"><summary>Ver más</summary>${mas}</details>` : mas;
   const f = FICHA_SUB[q.subtema];
-  if (f) h += `<div class="explica-bloque"><button class="btn btn-sec" data-ficha="${esc(f.id)}">${ICON.lupa()} Repasar: ${esc(f.titulo || q.subtema)}</button></div>`;
+  const esqs = esquemasDePregunta(q.id).map(r => r.e);
+  if (f || esqs.length) h += `<div class="explica-bloque fila-btns">${f ? `<button class="btn btn-sec" data-ficha="${esc(f.id)}">${ICON.lupa()} Repasar: ${esc(f.titulo || q.subtema)}</button>` : ''}${botonesEsquema(esqs, q.id)}</div>`;
   h += `</section>`;
   return h;
 }
@@ -1093,13 +1678,16 @@ function vBiblioteca() {
       <label class="oculto" for="buscar">Buscar pregunta</label><input id="buscar" class="buscar" type="search" placeholder="Buscar: Moncloa, 112, Constitución…" value="${esc(filtroTexto)}" autocomplete="off">
       <div id="resultados"></div>
       <div class="leyenda" style="margin-top:14px"><span><i class="punto"></i>Sin ver</span><span><i class="punto debil"></i>Fallada</span><span><i class="punto acertada"></i>Acertada</span><span><i class="punto dominada"></i>Dominada</span></div>
+      <div class="tarjeta"><h2>${ICON.esquema()} Esquemas</h2><p class="nota">Quién depende de quién, cómo se hace una ley, fechas, mapas de comunidades… Toca las cajas para ver cómo se relacionan.</p>
+        <ul class="lista">${ESQUEMAS.slice().sort((a, b) => a.tarea - b.tarea).map(e => `<li><button class="fila" data-esq="${e.id}"><span class="crece"><b>${esc(e.titulo)}</b><br><span class="peq">Tarea ${e.tarea} · ${plural(idsEsquema(e.id).length, 'pregunta relacionada', 'preguntas relacionadas')}</span></span>${ICON.chev()}</button></li>`).join('')}</ul></div>
       <div class="tarjeta"><ul class="lista">${[1, 2, 3, 4, 5].map(tt => { const ids = IDS_T(tt); return `<li><button class="fila" data-bib="${tt}"><span class="crece"><b>Tarea ${tt}. ${esc(TAREAS[tt].nombre)}</b><br><span class="peq">${ids.length} preguntas, ${ids.filter(superada).length} acertadas</span></span>${ICON.chev()}</button></li>`; }).join('')}</ul></div>`;
   } else {
     h += `<button class="btn-texto" data-bib="">‹ Todas las tareas</button><h1 class="tit-pagina">Tarea ${t}. ${esc(TAREAS[t].nombre)}</h1>`;
     for (const sub of ORDEN_SUB[t]) {
       const qs = D.questions.filter(q => q.tarea === Number(t) && q.subtema === sub);
       const f = FICHA_SUB[sub];
-      h += `<div class="tarjeta"><h2>${esc(sub)}</h2><div class="fila-btns" style="margin-bottom:6px">${f ? `<button class="btn btn-sec" data-ficha="${esc(f.id)}">Ficha de teoría</button>` : ''}<button class="btn btn-sec" data-practicar-sub="${esc(sub)}">Practicar (${qs.length})</button></div>
+      const esqs = ESQUEMAS.filter(e => qs.some(q => (PREG_ESQ[q.id] || []).some(r => r.e === e.id && r.nodos.length))).map(e => e.id);
+      h += `<div class="tarjeta"><h2>${esc(sub)}</h2><div class="fila-btns" style="margin-bottom:6px">${f ? `<button class="btn btn-sec" data-ficha="${esc(f.id)}">Ficha de teoría</button>` : ''}<button class="btn btn-sec" data-practicar-sub="${esc(sub)}">Practicar (${qs.length})</button>${botonesEsquema(esqs)}</div>
         <ul class="lista">${qs.map(filaPregunta).join('')}</ul></div>`;
     }
   }
@@ -1118,6 +1706,145 @@ function pintarBusqueda() {
   if (f.length < 2) { cont.innerHTML = ''; return; }
   const res = D.questions.filter(q => normaliza(q.q + ' ' + Object.values(q.opts).join(' ') + ' ' + q.id).includes(f)).slice(0, 40);
   cont.innerHTML = `<div class="tarjeta" style="margin-top:12px">${res.length ? `<ul class="lista">${res.map(filaPregunta).join('')}</ul>` : '<p class="intro">Ninguna pregunta contiene ese texto.</p>'}</div>`;
+}
+
+// ------------------------------------------------------------ Vista: esquemas
+let esqModal = null;   // {id, nodo, q} cuando el esquema se abre en una ventana (desde una pregunta en curso)
+const FLECHA_ABAJO = `<svg class="esq-flecha" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 V19 M6 13 L12 19 L18 13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function idsEsquema(id) {
+  const set = new Set();
+  Object.keys(ESQ[id].nodos).forEach(n => (NODO_PREG[id + '/' + n] || []).forEach(q => set.add(q)));
+  return D.questions.filter(q => set.has(q.id)).map(q => q.id);
+}
+// De los nodos donde encaja una pregunta, el más concreto (el que menos preguntas reúne)
+function nodoDePregunta(id, qid) {
+  const r = (PREG_ESQ[qid] || []).find(x => x.e === id);
+  if (!r || !r.nodos.length) return null;
+  return r.nodos.slice().sort((a, b) => (NODO_PREG[id + '/' + a] || []).length - (NODO_PREG[id + '/' + b] || []).length)[0];
+}
+function abrirEsquema(id, qid) {
+  if (!ESQ[id]) return;
+  const nodo = qid ? nodoDePregunta(id, qid) : null;
+  if (pantalla === 'sesion') { esqModal = { id, nodo, q: qid || null }; return modalEsquema(); }
+  esqModal = null;
+  ir('esquema', { id, nodo, q: qid || null });
+  const b = nodo && $('.nodo.sel');
+  if (b) b.scrollIntoView({ block: 'center' });
+}
+function nodoHTML(e, n, ctx, tonoDef) {
+  const x = e.nodos[n]; if (!x) return '';
+  const tono = x.tono || tonoDef || e.tono || 'g';
+  ctx.tonoDe[n] = tono;
+  const cls = ['nodo', 'tono-' + tono];
+  if (ctx.sel === n) cls.push('sel'); else if (ctx.rel.has(n)) cls.push('rel');
+  if (ctx.preg.has(n)) cls.push('preg');
+  return `<button class="${cls.join(' ')}" data-esq-nodo="${n}" aria-pressed="${ctx.sel === n}">${esc(x.t)}${x.s ? `<small>${esc(x.s)}</small>` : ''}</button>`;
+}
+// ['a', '>b', '>>c', 'd'] -> listas anidadas: cada '>' es un nivel de dependencia
+function arbolHTML(items, e, ctx, tono) {
+  let h = '<ul class="esq-arbol">', nivel = 0;
+  items.forEach((it, i) => {
+    const d = it.match(/^>*/)[0].length, id = it.slice(d);
+    if (i > 0) {
+      if (d > nivel) h += '<ul>';
+      else { h += '</li>'; for (let k = nivel; k > d; k--) h += '</ul></li>'; }
+    }
+    h += `<li>${nodoHTML(e, id, ctx, tono)}`;
+    nivel = d;
+  });
+  h += '</li>'; for (let k = nivel; k > 0; k--) h += '</ul></li>';
+  return h + '</ul>';
+}
+function bloqueHTML(b, e, ctx) {
+  let h = `<section class="esq-bloque">${b.tit ? `<h2>${esc(b.tit)}</h2>` : ''}`;
+  if (b.tipo === 'org') {
+    b.filas.forEach((f, i) => {
+      const aparte = Array.isArray(f) && f[0] === '|';
+      if (i > 0) h += aparte ? '<div class="esq-sep" aria-hidden="true"></div>' : '<div class="esq-con" aria-hidden="true"></div>';
+      if (Array.isArray(f)) h += `<div class="esq-fila">${f.filter(n => n !== '|').map(n => nodoHTML(e, n, ctx)).join('')}</div>`;
+      else h += `<div class="esq-cols${i === 0 ? ' sin-padre' : ''}" style="--n:${f.cols.length}">${f.cols.map(c => `<div class="esq-col tono-${c.tono || 'g'}"><p class="esq-col-tit">${esc(c.tit)}</p>${arbolHTML(c.items, e, ctx, c.tono)}</div>`).join('')}</div>`;
+    });
+  } else if (b.tipo === 'flujo') {
+    h += `<div class="esq-flujo">${b.pasos.map(p => `<div class="esq-paso">${[].concat(p).map(n => nodoHTML(e, n, ctx)).join('<span class="esq-paso-o">o</span>')}</div>`).join(FLECHA_ABAJO)}</div>`;
+  } else if (b.tipo === 'grupos') {
+    h += `<div class="esq-grupos">${b.grupos.map(g => {
+      const x = e.nodos[g.n];
+      return `<div class="esq-grupo tono-${x.tono || e.tono || 'g'}">${nodoHTML(e, g.n, ctx)}${g.items && g.items.length ? `<ul>${g.items.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</div>`;
+    }).join('')}</div>`;
+  } else if (b.tipo === 'linea') {
+    h += `<ol class="esq-linea">${b.hitos.map(([f, n]) => `<li class="esq-hito"><span class="esq-hito-f">${esc(f)}</span>${nodoHTML(e, n, ctx)}</li>`).join('')}</ol>`;
+  }
+  return h + '</section>';
+}
+function panelHTML(e, ctx, conPreguntas) {
+  const n = ctx.sel, x = e.nodos[n];
+  const rels = e.rels.filter(r => r[0] === n || r[1] === n);
+  const ids = NODO_PREG[e.id + '/' + n] || [];
+  let h = `<aside class="esq-panel tono-${ctx.tonoDe[n] || 'g'}" aria-label="Detalle: ${esc(x.t)}">
+    <div class="esq-panel-cab"><h3>${esc(x.t)}</h3><button class="btn-x" data-esq-nodo="" aria-label="Cerrar el detalle">${ICON.x()}</button></div>`;
+  if (x.s) h += `<p class="nota">${esc(x.s)}</p>`;
+  if (x.d) h += `<p style="margin-top:6px">${esc(x.d)}</p>`;
+  if (rels.length) h += `<ul class="esq-rels">${rels.map(r => { const otro = r[0] === n ? r[1] : r[0]; return `<li>${esc(r[2])} <button class="btn-texto" data-esq-nodo="${otro}">${esc(e.nodos[otro].t)} ›</button></li>`; }).join('')}</ul>`;
+  if (ids.length) {
+    h += conPreguntas
+      ? `<details class="mas-info"><summary>${plural(ids.length, 'pregunta del examen', 'preguntas del examen')} sobre esto</summary><ul class="lista">${ids.map(id => filaPregunta(Q[id])).join('')}</ul></details>`
+      : `<p class="nota" style="margin-top:8px">${plural(ids.length, 'pregunta del examen trata', 'preguntas del examen tratan')} sobre esto.</p>`;
+  }
+  return h + '</aside>';
+}
+function esquemaHTML(e, st, enModal) {
+  const r = st.q ? (PREG_ESQ[st.q] || []).find(x => x.e === e.id) : null;
+  const preg = new Set(r ? r.nodos : []);
+  const sel = st.nodo && e.nodos[st.nodo] ? st.nodo : null;
+  const rel = new Set();
+  if (sel) e.rels.forEach(x => { if (x[0] === sel) rel.add(x[1]); if (x[1] === sel) rel.add(x[0]); });
+  const ctx = { sel, rel, preg, tonoDe: {} };
+  let h = '';
+  if (st.q && Q[st.q]) h += `<div class="esq-pregunta"><b>Tu pregunta:</b> ${esc(Q[st.q].q)}${preg.size ? '<br><span class="nota">La estrella ★ marca dónde está en el esquema.</span>' : ''}</div>`;
+  if (e.clave && e.clave.length) h += `<div class="esq-clave"><h2>Lo esencial</h2><ul>${e.clave.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>`;
+  h += `<p class="esq-pista">Toca una caja para ver qué hace y con quién se relaciona.</p>`;
+  h += `<div class="esq${sel ? ' con-sel' : ''}">${e.bloques.map(b => bloqueHTML(b, e, ctx)).join('')}</div>`;
+  if (sel) h += panelHTML(e, ctx, !enModal);
+  const frases = [...new Set(e.rels.map(x => x[2]))];
+  if (frases.length) h += `<details class="tarjeta mas-info"><summary>Todas las relaciones (${frases.length})</summary><ul class="esq-rels">${frases.map(f => `<li>${esc(f)}</li>`).join('')}</ul></details>`;
+  return h;
+}
+function modalEsquema() {
+  const st = esqModal, e = st && ESQ[st.id]; if (!e) return;
+  const h = `<div class="dialogo-cab"><h2>${esc(e.titulo)}</h2><button class="btn-x" data-accion="cerrar" aria-label="Cerrar">${ICON.x()}</button></div>${esquemaHTML(e, st, true)}`;
+  const d = $('.dialogo[data-esquema]');
+  if (d) { const top = d.scrollTop; d.innerHTML = h; d.scrollTop = top; return; }
+  abrirModal(h, e.titulo);
+  $('.dialogo').setAttribute('data-esquema', e.id);
+  if (st.nodo) { const b = $(`.dialogo [data-esq-nodo="${st.nodo}"]`); if (b) b.scrollIntoView({ block: 'center' }); }
+}
+function elegirNodo(n) {
+  if (esqModal && $('.dialogo[data-esquema]')) {
+    esqModal.nodo = esqModal.nodo === n ? null : n;
+    modalEsquema();
+  } else if (pantalla === 'esquema') {
+    params.nodo = params.nodo === n ? null : n;
+    try { history.replaceState({ p: pantalla, prm: params }, ''); } catch (e) { /* sin history */ }
+    render();
+  } else return;
+  const b = n && $(`[data-esq-nodo="${n}"].nodo`);
+  if (b) b.focus({ preventScroll: true });
+}
+function botonesEsquema(lista, qid) {
+  return lista.map(id => `<button class="btn btn-sec btn-esq" data-esq="${id}"${qid ? ` data-esq-q="${qid}"` : ''}>${ICON.esquema()} ${qid ? 'Ver en el esquema' : 'Esquema'}: ${esc(ESQ[id].corto)}</button>`).join('');
+}
+function vEsquema() {
+  const e = ESQ[params.id];
+  if (!e) { params = {}; return vBiblioteca(); }
+  let h = `<div class="pagina"><button class="btn-texto" data-bib="">‹ Preguntas y esquemas</button>
+    <h1 class="tit-pagina">${esc(e.titulo)}</h1><p class="intro">${esc(e.intro)}</p>`;
+  h += esquemaHTML(e, params, false);
+  const ids = idsEsquema(e.id);
+  const fichas = e.subtemas.map(s => FICHA_SUB[s]).filter(Boolean);
+  h += `<div class="tarjeta"><h2>Para repasar</h2>`;
+  if (ids.length) h += `<button class="btn btn-ancho" data-practicar-esq="${e.id}" style="margin-bottom:8px">Practicar preguntas de este esquema (${ids.length})</button>`;
+  h += `<ul class="lista">${fichas.map(f => `<li><button class="fila" data-ficha="${esc(f.id)}"><span class="crece">Ficha: ${esc(f.titulo || f.subtema)}<br><span class="peq">Tarea ${f.tarea}</span></span>${ICON.chev()}</button></li>`).join('')}</ul></div>`;
+  return h + `</div>`;
 }
 
 // ------------------------------------------------------------ Vista: progreso y ajustes
@@ -1168,6 +1895,8 @@ function modalFicha(fid) {
   if (f.tabla && f.tabla.filas && f.tabla.filas.length) h += `<div class="tabla-scroll" style="margin-top:14px"><table class="tabla"><thead><tr>${f.tabla.cabecera.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${f.tabla.filas.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
   if (f.ojo && f.ojo.length) h += `<div class="ojo"><h3>Ojo con</h3><ul>${f.ojo.map(o => `<li>${esc(o)}</li>`).join('')}</ul></div>`;
   h += `<p class="nota" style="margin-top:14px">${plural(ids.length, 'pregunta', 'preguntas')} de este tema en el examen.</p>`;
+  const esqs = ESQ_SUB(f.subtema).filter(e => ids.some(q => (PREG_ESQ[q.id] || []).some(r => r.e === e.id && r.nodos.length))).map(e => e.id);
+  if (esqs.length) h += `<div class="fila-btns" style="margin-top:12px">${botonesEsquema(esqs)}</div>`;
   abrirModal(h, f.titulo || f.subtema);
 }
 function modalPregunta(id) {
@@ -1247,6 +1976,9 @@ document.addEventListener('click', e => {
   if (d.ir !== undefined) { if (d.ir === 'biblioteca') params = {}; return ir(d.ir); }
   if (d.ronda) return empezarRonda(d.ronda);
   if (d.ficha) return modalFicha(d.ficha);
+  if (d.esqNodo !== undefined) return elegirNodo(d.esqNodo || null);
+  if (d.esq) return abrirEsquema(d.esq, d.esqQ || null);
+  if (d.practicarEsq) return empezarPractica(weightedPick(idsEsquema(d.practicarEsq), 10, pesoRepaso), `Esquema: ${ESQ[d.practicarEsq].corto}`);
   if (d.ver) return modalPregunta(d.ver);
   if (d.bib !== undefined) return ir('biblioteca', d.bib ? { tarea: Number(d.bib) } : {});
   if (d.modo) { modoSim = d.modo; return render(); }
@@ -1328,7 +2060,7 @@ document.addEventListener('keydown', e => {
     if (idx >= 0 && orden[idx]) { ses.sel = orden[idx]; render(); e.preventDefault(); return; }
     if (e.key === 'Enter' && ses.sel && !e.target.matches('.opcion')) { e.preventDefault(); comprobar(); return; }
     if (e.key === 'Enter' && ses.sel && e.target.matches('.opcion')) { e.preventDefault(); comprobar(); return; }
-  } else if (e.key === 'Enter' && !e.target.closest('details, [data-ficha]')) { e.preventDefault(); siguiente(); }
+  } else if (e.key === 'Enter' && !e.target.closest('details, [data-ficha], [data-esq]')) { e.preventDefault(); siguiente(); }
 });
 
 // Tras terminar una ronda, ofrecer examen sorpresa (aleatorio) o control de etapa.
